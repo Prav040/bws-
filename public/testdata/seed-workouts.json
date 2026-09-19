@@ -1,0 +1,1632 @@
+{
+  "workouts": [
+    {
+      "id": "default-push",
+      "name": "Push-Tag",
+      "exercises": [
+        {
+          "id": "push-1",
+          "name": "Bankdrücken",
+          "targetReps": 8,
+          "restSec": 180,
+          "notes": "",
+          "image": null,
+          "sets": []
+        },
+        {
+          "id": "push-2",
+          "name": "Schrägbankdrücken",
+          "targetReps": 8,
+          "restSec": 150,
+          "notes": "",
+          "image": null,
+          "sets": []
+        },
+        {
+          "id": "push-3",
+          "name": "Schulterdrücken",
+          "targetReps": 10,
+          "restSec": 120,
+          "notes": "",
+          "image": null,
+          "sets": []
+        },
+        {
+          "id": "push-4",
+          "name": "Seitheben",
+          "targetReps": 12,
+          "restSec": 60,
+          "notes": "",
+          "image": null,
+          "sets": []
+        },
+        {
+          "id": "push-5",
+          "name": "Trizepsdrücken (Seil)",
+          "targetReps": 12,
+          "restSec": 60,
+          "notes": "",
+          "image": null,
+          "sets": []
+        },
+        {
+          "id": "push-6",
+          "name": "Trizeps Overhead Ext.",
+          "targetReps": 12,
+          "restSec": 60,
+          "notes": "",
+          "image": null,
+          "sets": []
+        }
+      ]
+    },
+    {
+      "id": "default-pull",
+      "name": "Pull-Tag",
+      "exercises": [
+        {
+          "id": "pull-1",
+          "name": "Kreuzheben",
+          "targetReps": 5,
+          "restSec": 240,
+          "notes": "",
+          "image": null,
+          "sets": []
+        },
+        {
+          "id": "pull-2",
+          "name": "Klimmzüge / Latzug",
+          "targetReps": 8,
+          "restSec": 150,
+          "notes": "",
+          "image": null,
+          "sets": []
+        },
+        {
+          "id": "pull-3",
+          "name": "Langhantel-Rudern",
+          "targetReps": 8,
+          "restSec": 120,
+          "notes": "",
+          "image": null,
+          "sets": []
+        },
+        {
+          "id": "pull-4",
+          "name": "Kabel-Rudern",
+          "targetReps": 10,
+          "restSec": 90,
+          "notes": "",
+          "image": null,
+          "sets": []
+        },
+        {
+          "id": "pull-5",
+          "name": "Face Pulls",
+          "targetReps": 15,
+          "restSec": 60,
+          "notes": "",
+          "image": null,
+          "sets": []
+        },
+        {
+          "id": "pull-6",
+          "name": "Bizeps-Curls",
+          "targetReps": 12,
+          "restSec": 60,
+          "notes": "",
+          "image": null,
+          "sets": []
+        }
+      ]
+    },
+    {
+      "id": "default-legs",
+      "name": "Beine",
+      "exercises": [
+        {
+          "id": "legs-1",
+          "name": "Kniebeugen",
+          "targetReps": 6,
+          "restSec": 240,
+          "notes": "",
+          "image": null,
+          "sets": []
+        },
+        {
+          "id": "legs-2",
+          "name": "Rumänisches Kreuzheben",
+          "targetReps": 8,
+          "restSec": 150,
+          "notes": "",
+          "image": null,
+          "sets": []
+        },
+        {
+          "id": "legs-3",
+          "name": "Beinpresse",
+          "targetReps": 10,
+          "restSec": 150,
+          "notes": "",
+          "image": null,
+          "sets": []
+        },
+        {
+          "id": "legs-4",
+          "name": "Beinbeuger",
+          "targetReps": 12,
+          "restSec": 90,
+          "notes": "",
+          "image": null,
+          "sets": []
+        },
+        {
+          "id": "legs-5",
+          "name": "Wadenheben",
+          "targetReps": 15,
+          "restSec": 60,
+          "notes": "",
+          "image": null,
+          "sets": []
+        }
+      ]
+    }
+  ],
+  "history": [
+    {
+      "date": "2026-07-26T18:00:00Z",
+      "name": "Push-Tag",
+      "totalSets": 21,
+      "doneSets": 21,
+      "volume": 5795.3
+    },
+    {
+      "date": "2026-07-28T18:00:00Z",
+      "name": "Pull-Tag",
+      "totalSets": 19,
+      "doneSets": 19,
+      "volume": 7800.0
+    },
+    {
+      "date": "2026-07-31T18:00:00Z",
+      "name": "Beine",
+      "totalSets": 18,
+      "doneSets": 18,
+      "volume": 11130.0
+    },
+    {
+      "date": "2026-08-02T18:00:00Z",
+      "name": "Push-Tag",
+      "totalSets": 19,
+      "doneSets": 19,
+      "volume": 5725.3
+    },
+    {
+      "date": "2026-08-04T18:00:00Z",
+      "name": "Pull-Tag",
+      "totalSets": 20,
+      "doneSets": 20,
+      "volume": 7833.7
+    },
+    {
+      "date": "2026-08-07T18:00:00Z",
+      "name": "Beine",
+      "totalSets": 16,
+      "doneSets": 16,
+      "volume": 10930.0
+    },
+    {
+      "date": "2026-08-09T18:00:00Z",
+      "name": "Push-Tag",
+      "totalSets": 21,
+      "doneSets": 21,
+      "volume": 6470.0
+    },
+    {
+      "date": "2026-08-11T18:00:00Z",
+      "name": "Pull-Tag",
+      "totalSets": 22,
+      "doneSets": 22,
+      "volume": 10150.0
+    },
+    {
+      "date": "2026-08-14T18:00:00Z",
+      "name": "Beine",
+      "totalSets": 16,
+      "doneSets": 16,
+      "volume": 10577.5
+    },
+    {
+      "date": "2026-08-16T18:00:00Z",
+      "name": "Push-Tag",
+      "totalSets": 22,
+      "doneSets": 22,
+      "volume": 7225.0
+    },
+    {
+      "date": "2026-08-18T18:00:00Z",
+      "name": "Pull-Tag",
+      "totalSets": 20,
+      "doneSets": 20,
+      "volume": 8600.0
+    },
+    {
+      "date": "2026-08-21T18:00:00Z",
+      "name": "Beine",
+      "totalSets": 17,
+      "doneSets": 17,
+      "volume": 11460.0
+    },
+    {
+      "date": "2026-08-23T18:00:00Z",
+      "name": "Push-Tag",
+      "totalSets": 21,
+      "doneSets": 21,
+      "volume": 6814.5
+    },
+    {
+      "date": "2026-08-25T18:00:00Z",
+      "name": "Pull-Tag",
+      "totalSets": 20,
+      "doneSets": 20,
+      "volume": 8842.5
+    },
+    {
+      "date": "2026-08-28T18:00:00Z",
+      "name": "Beine",
+      "totalSets": 19,
+      "doneSets": 19,
+      "volume": 13475.0
+    },
+    {
+      "date": "2026-08-30T18:00:00Z",
+      "name": "Push-Tag",
+      "totalSets": 21,
+      "doneSets": 21,
+      "volume": 7918.0
+    },
+    {
+      "date": "2026-09-01T18:00:00Z",
+      "name": "Pull-Tag",
+      "totalSets": 20,
+      "doneSets": 20,
+      "volume": 9563.8
+    },
+    {
+      "date": "2026-09-04T18:00:00Z",
+      "name": "Beine",
+      "totalSets": 16,
+      "doneSets": 16,
+      "volume": 11757.5
+    },
+    {
+      "date": "2026-09-07T18:00:00Z",
+      "name": "Push-Tag",
+      "totalSets": 20,
+      "doneSets": 20,
+      "volume": 6519.0
+    },
+    {
+      "date": "2026-09-09T18:00:00Z",
+      "name": "Pull-Tag",
+      "totalSets": 18,
+      "doneSets": 18,
+      "volume": 8557.5
+    },
+    {
+      "date": "2026-09-12T18:00:00Z",
+      "name": "Beine",
+      "totalSets": 16,
+      "doneSets": 16,
+      "volume": 10717.5
+    },
+    {
+      "date": "2026-09-14T18:00:00Z",
+      "name": "Push-Tag",
+      "totalSets": 19,
+      "doneSets": 19,
+      "volume": 6823.5
+    },
+    {
+      "date": "2026-09-16T18:00:00Z",
+      "name": "Pull-Tag",
+      "totalSets": 18,
+      "doneSets": 18,
+      "volume": 8951.3
+    },
+    {
+      "date": "2026-09-17T18:00:00Z",
+      "name": "Beine",
+      "totalSets": 15,
+      "doneSets": 15,
+      "volume": 10515.0
+    },
+    {
+      "date": "2026-09-18T18:00:00Z",
+      "name": "Push-Tag",
+      "totalSets": 21,
+      "doneSets": 21,
+      "volume": 8451.0
+    }
+  ],
+  "exerciseHistory": [
+    {
+      "date": "2026-07-26T18:00:00Z",
+      "exerciseId": "push-1",
+      "exerciseName": "Bankdrücken",
+      "topWeight": 62.5,
+      "topReps": 6,
+      "volume": 1500.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-07-26T18:00:00Z",
+      "exerciseId": "push-2",
+      "exerciseName": "Schrägbankdrücken",
+      "topWeight": 47.5,
+      "topReps": 7,
+      "volume": 997.5,
+      "sets": 3
+    },
+    {
+      "date": "2026-07-26T18:00:00Z",
+      "exerciseId": "push-3",
+      "exerciseName": "Schulterdrücken",
+      "topWeight": 33.25,
+      "topReps": 9,
+      "volume": 897.8,
+      "sets": 3
+    },
+    {
+      "date": "2026-07-26T18:00:00Z",
+      "exerciseId": "push-4",
+      "exerciseName": "Seitheben",
+      "topWeight": 10.5,
+      "topReps": 10,
+      "volume": 420.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-07-26T18:00:00Z",
+      "exerciseId": "push-5",
+      "exerciseName": "Trizepsdrücken (Seil)",
+      "topWeight": 26.25,
+      "topReps": 12,
+      "volume": 1260.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-07-26T18:00:00Z",
+      "exerciseId": "push-6",
+      "exerciseName": "Trizeps Overhead Ext.",
+      "topWeight": 20.0,
+      "topReps": 12,
+      "volume": 720.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-07-28T18:00:00Z",
+      "exerciseId": "pull-1",
+      "exerciseName": "Kreuzheben",
+      "topWeight": 102.5,
+      "topReps": 5,
+      "volume": 1537.5,
+      "sets": 3
+    },
+    {
+      "date": "2026-07-28T18:00:00Z",
+      "exerciseId": "pull-2",
+      "exerciseName": "Klimmzüge / Latzug",
+      "topWeight": 61.25,
+      "topReps": 6,
+      "volume": 1102.5,
+      "sets": 3
+    },
+    {
+      "date": "2026-07-28T18:00:00Z",
+      "exerciseId": "pull-3",
+      "exerciseName": "Langhantel-Rudern",
+      "topWeight": 50.0,
+      "topReps": 8,
+      "volume": 1200.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-07-28T18:00:00Z",
+      "exerciseId": "pull-4",
+      "exerciseName": "Kabel-Rudern",
+      "topWeight": 45.0,
+      "topReps": 10,
+      "volume": 1350.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-07-28T18:00:00Z",
+      "exerciseId": "pull-5",
+      "exerciseName": "Face Pulls",
+      "topWeight": 30.0,
+      "topReps": 15,
+      "volume": 1350.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-07-28T18:00:00Z",
+      "exerciseId": "pull-6",
+      "exerciseName": "Bizeps-Curls",
+      "topWeight": 26.25,
+      "topReps": 12,
+      "volume": 1260.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-07-31T18:00:00Z",
+      "exerciseId": "legs-1",
+      "exerciseName": "Kniebeugen",
+      "topWeight": 72.5,
+      "topReps": 6,
+      "volume": 1740.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-07-31T18:00:00Z",
+      "exerciseId": "legs-2",
+      "exerciseName": "Rumänisches Kreuzheben",
+      "topWeight": 62.5,
+      "topReps": 6,
+      "volume": 1125.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-07-31T18:00:00Z",
+      "exerciseId": "legs-3",
+      "exerciseName": "Beinpresse",
+      "topWeight": 120.0,
+      "topReps": 8,
+      "volume": 3840.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-07-31T18:00:00Z",
+      "exerciseId": "legs-4",
+      "exerciseName": "Beinbeuger",
+      "topWeight": 41.25,
+      "topReps": 12,
+      "volume": 1485.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-07-31T18:00:00Z",
+      "exerciseId": "legs-5",
+      "exerciseName": "Wadenheben",
+      "topWeight": 52.5,
+      "topReps": 14,
+      "volume": 2940.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-02T18:00:00Z",
+      "exerciseId": "push-1",
+      "exerciseName": "Bankdrücken",
+      "topWeight": 65.0,
+      "topReps": 8,
+      "volume": 1560.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-02T18:00:00Z",
+      "exerciseId": "push-2",
+      "exerciseName": "Schrägbankdrücken",
+      "topWeight": 50.0,
+      "topReps": 8,
+      "volume": 1200.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-02T18:00:00Z",
+      "exerciseId": "push-3",
+      "exerciseName": "Schulterdrücken",
+      "topWeight": 33.25,
+      "topReps": 9,
+      "volume": 897.8,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-02T18:00:00Z",
+      "exerciseId": "push-4",
+      "exerciseName": "Seitheben",
+      "topWeight": 11.0,
+      "topReps": 10,
+      "volume": 440.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-02T18:00:00Z",
+      "exerciseId": "push-5",
+      "exerciseName": "Trizepsdrücken (Seil)",
+      "topWeight": 27.5,
+      "topReps": 12,
+      "volume": 990.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-02T18:00:00Z",
+      "exerciseId": "push-6",
+      "exerciseName": "Trizeps Overhead Ext.",
+      "topWeight": 21.25,
+      "topReps": 10,
+      "volume": 637.5,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-04T18:00:00Z",
+      "exerciseId": "pull-1",
+      "exerciseName": "Kreuzheben",
+      "topWeight": 105.0,
+      "topReps": 5,
+      "volume": 1575.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-04T18:00:00Z",
+      "exerciseId": "pull-2",
+      "exerciseName": "Klimmzüge / Latzug",
+      "topWeight": 60.0,
+      "topReps": 6,
+      "volume": 1440.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-04T18:00:00Z",
+      "exerciseId": "pull-3",
+      "exerciseName": "Langhantel-Rudern",
+      "topWeight": 52.5,
+      "topReps": 7,
+      "volume": 1102.5,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-04T18:00:00Z",
+      "exerciseId": "pull-4",
+      "exerciseName": "Kabel-Rudern",
+      "topWeight": 46.25,
+      "topReps": 8,
+      "volume": 1110.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-04T18:00:00Z",
+      "exerciseId": "pull-5",
+      "exerciseName": "Face Pulls",
+      "topWeight": 31.25,
+      "topReps": 15,
+      "volume": 1406.2,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-04T18:00:00Z",
+      "exerciseId": "pull-6",
+      "exerciseName": "Bizeps-Curls",
+      "topWeight": 25.0,
+      "topReps": 12,
+      "volume": 1200.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-07T18:00:00Z",
+      "exerciseId": "legs-1",
+      "exerciseName": "Kniebeugen",
+      "topWeight": 70.0,
+      "topReps": 6,
+      "volume": 1260.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-07T18:00:00Z",
+      "exerciseId": "legs-2",
+      "exerciseName": "Rumänisches Kreuzheben",
+      "topWeight": 65.0,
+      "topReps": 8,
+      "volume": 2080.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-07T18:00:00Z",
+      "exerciseId": "legs-3",
+      "exerciseName": "Beinpresse",
+      "topWeight": 122.5,
+      "topReps": 10,
+      "volume": 3675.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-07T18:00:00Z",
+      "exerciseId": "legs-4",
+      "exerciseName": "Beinbeuger",
+      "topWeight": 40.0,
+      "topReps": 12,
+      "volume": 1440.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-07T18:00:00Z",
+      "exerciseId": "legs-5",
+      "exerciseName": "Wadenheben",
+      "topWeight": 55.0,
+      "topReps": 15,
+      "volume": 2475.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-09T18:00:00Z",
+      "exerciseId": "push-1",
+      "exerciseName": "Bankdrücken",
+      "topWeight": 67.5,
+      "topReps": 6,
+      "volume": 1215.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-09T18:00:00Z",
+      "exerciseId": "push-2",
+      "exerciseName": "Schrägbankdrücken",
+      "topWeight": 52.5,
+      "topReps": 8,
+      "volume": 1260.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-09T18:00:00Z",
+      "exerciseId": "push-3",
+      "exerciseName": "Schulterdrücken",
+      "topWeight": 34.5,
+      "topReps": 10,
+      "volume": 1380.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-09T18:00:00Z",
+      "exerciseId": "push-4",
+      "exerciseName": "Seitheben",
+      "topWeight": 10.0,
+      "topReps": 12,
+      "volume": 360.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-09T18:00:00Z",
+      "exerciseId": "push-5",
+      "exerciseName": "Trizepsdrücken (Seil)",
+      "topWeight": 28.75,
+      "topReps": 11,
+      "volume": 1265.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-09T18:00:00Z",
+      "exerciseId": "push-6",
+      "exerciseName": "Trizeps Overhead Ext.",
+      "topWeight": 22.5,
+      "topReps": 11,
+      "volume": 990.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-11T18:00:00Z",
+      "exerciseId": "pull-1",
+      "exerciseName": "Kreuzheben",
+      "topWeight": 107.5,
+      "topReps": 5,
+      "volume": 2150.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-11T18:00:00Z",
+      "exerciseId": "pull-2",
+      "exerciseName": "Klimmzüge / Latzug",
+      "topWeight": 60.0,
+      "topReps": 8,
+      "volume": 1920.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-11T18:00:00Z",
+      "exerciseId": "pull-3",
+      "exerciseName": "Langhantel-Rudern",
+      "topWeight": 55.0,
+      "topReps": 8,
+      "volume": 1760.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-11T18:00:00Z",
+      "exerciseId": "pull-4",
+      "exerciseName": "Kabel-Rudern",
+      "topWeight": 47.5,
+      "topReps": 10,
+      "volume": 1425.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-11T18:00:00Z",
+      "exerciseId": "pull-5",
+      "exerciseName": "Face Pulls",
+      "topWeight": 32.5,
+      "topReps": 15,
+      "volume": 1950.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-11T18:00:00Z",
+      "exerciseId": "pull-6",
+      "exerciseName": "Bizeps-Curls",
+      "topWeight": 26.25,
+      "topReps": 12,
+      "volume": 945.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-14T18:00:00Z",
+      "exerciseId": "legs-1",
+      "exerciseName": "Kniebeugen",
+      "topWeight": 72.5,
+      "topReps": 5,
+      "volume": 1087.5,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-14T18:00:00Z",
+      "exerciseId": "legs-2",
+      "exerciseName": "Rumänisches Kreuzheben",
+      "topWeight": 67.5,
+      "topReps": 7,
+      "volume": 1417.5,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-14T18:00:00Z",
+      "exerciseId": "legs-3",
+      "exerciseName": "Beinpresse",
+      "topWeight": 125.0,
+      "topReps": 8,
+      "volume": 4000.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-14T18:00:00Z",
+      "exerciseId": "legs-4",
+      "exerciseName": "Beinbeuger",
+      "topWeight": 41.25,
+      "topReps": 12,
+      "volume": 1485.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-14T18:00:00Z",
+      "exerciseId": "legs-5",
+      "exerciseName": "Wadenheben",
+      "topWeight": 57.5,
+      "topReps": 15,
+      "volume": 2587.5,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-16T18:00:00Z",
+      "exerciseId": "push-1",
+      "exerciseName": "Bankdrücken",
+      "topWeight": 70.0,
+      "topReps": 6,
+      "volume": 1260.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-16T18:00:00Z",
+      "exerciseId": "push-2",
+      "exerciseName": "Schrägbankdrücken",
+      "topWeight": 55.0,
+      "topReps": 8,
+      "volume": 1760.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-16T18:00:00Z",
+      "exerciseId": "push-3",
+      "exerciseName": "Schulterdrücken",
+      "topWeight": 35.75,
+      "topReps": 10,
+      "volume": 1430.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-16T18:00:00Z",
+      "exerciseId": "push-4",
+      "exerciseName": "Seitheben",
+      "topWeight": 10.0,
+      "topReps": 12,
+      "volume": 480.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-16T18:00:00Z",
+      "exerciseId": "push-5",
+      "exerciseName": "Trizepsdrücken (Seil)",
+      "topWeight": 30.0,
+      "topReps": 12,
+      "volume": 1440.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-16T18:00:00Z",
+      "exerciseId": "push-6",
+      "exerciseName": "Trizeps Overhead Ext.",
+      "topWeight": 23.75,
+      "topReps": 12,
+      "volume": 855.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-18T18:00:00Z",
+      "exerciseId": "pull-1",
+      "exerciseName": "Kreuzheben",
+      "topWeight": 110.0,
+      "topReps": 5,
+      "volume": 1650.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-18T18:00:00Z",
+      "exerciseId": "pull-2",
+      "exerciseName": "Klimmzüge / Latzug",
+      "topWeight": 61.25,
+      "topReps": 8,
+      "volume": 1470.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-18T18:00:00Z",
+      "exerciseId": "pull-3",
+      "exerciseName": "Langhantel-Rudern",
+      "topWeight": 57.5,
+      "topReps": 7,
+      "volume": 1610.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-18T18:00:00Z",
+      "exerciseId": "pull-4",
+      "exerciseName": "Kabel-Rudern",
+      "topWeight": 48.75,
+      "topReps": 8,
+      "volume": 1170.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-18T18:00:00Z",
+      "exerciseId": "pull-5",
+      "exerciseName": "Face Pulls",
+      "topWeight": 33.75,
+      "topReps": 13,
+      "volume": 1755.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-18T18:00:00Z",
+      "exerciseId": "pull-6",
+      "exerciseName": "Bizeps-Curls",
+      "topWeight": 26.25,
+      "topReps": 12,
+      "volume": 945.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-21T18:00:00Z",
+      "exerciseId": "legs-1",
+      "exerciseName": "Kniebeugen",
+      "topWeight": 70.0,
+      "topReps": 6,
+      "volume": 1260.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-21T18:00:00Z",
+      "exerciseId": "legs-2",
+      "exerciseName": "Rumänisches Kreuzheben",
+      "topWeight": 67.5,
+      "topReps": 6,
+      "volume": 1620.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-21T18:00:00Z",
+      "exerciseId": "legs-3",
+      "exerciseName": "Beinpresse",
+      "topWeight": 127.5,
+      "topReps": 10,
+      "volume": 5100.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-21T18:00:00Z",
+      "exerciseId": "legs-4",
+      "exerciseName": "Beinbeuger",
+      "topWeight": 42.5,
+      "topReps": 10,
+      "volume": 1275.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-21T18:00:00Z",
+      "exerciseId": "legs-5",
+      "exerciseName": "Wadenheben",
+      "topWeight": 52.5,
+      "topReps": 14,
+      "volume": 2205.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-23T18:00:00Z",
+      "exerciseId": "push-1",
+      "exerciseName": "Bankdrücken",
+      "topWeight": 72.5,
+      "topReps": 7,
+      "volume": 1522.5,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-23T18:00:00Z",
+      "exerciseId": "push-2",
+      "exerciseName": "Schrägbankdrücken",
+      "topWeight": 50.0,
+      "topReps": 8,
+      "volume": 1200.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-23T18:00:00Z",
+      "exerciseId": "push-3",
+      "exerciseName": "Schulterdrücken",
+      "topWeight": 37.0,
+      "topReps": 8,
+      "volume": 888.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-23T18:00:00Z",
+      "exerciseId": "push-4",
+      "exerciseName": "Seitheben",
+      "topWeight": 10.5,
+      "topReps": 12,
+      "volume": 504.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-23T18:00:00Z",
+      "exerciseId": "push-5",
+      "exerciseName": "Trizepsdrücken (Seil)",
+      "topWeight": 31.25,
+      "topReps": 12,
+      "volume": 1500.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-23T18:00:00Z",
+      "exerciseId": "push-6",
+      "exerciseName": "Trizeps Overhead Ext.",
+      "topWeight": 25.0,
+      "topReps": 12,
+      "volume": 1200.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-25T18:00:00Z",
+      "exerciseId": "pull-1",
+      "exerciseName": "Kreuzheben",
+      "topWeight": 112.5,
+      "topReps": 5,
+      "volume": 1687.5,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-25T18:00:00Z",
+      "exerciseId": "pull-2",
+      "exerciseName": "Klimmzüge / Latzug",
+      "topWeight": 62.5,
+      "topReps": 6,
+      "volume": 1500.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-25T18:00:00Z",
+      "exerciseId": "pull-3",
+      "exerciseName": "Langhantel-Rudern",
+      "topWeight": 60.0,
+      "topReps": 7,
+      "volume": 1260.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-25T18:00:00Z",
+      "exerciseId": "pull-4",
+      "exerciseName": "Kabel-Rudern",
+      "topWeight": 50.0,
+      "topReps": 10,
+      "volume": 1500.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-25T18:00:00Z",
+      "exerciseId": "pull-5",
+      "exerciseName": "Face Pulls",
+      "topWeight": 35.0,
+      "topReps": 15,
+      "volume": 1575.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-25T18:00:00Z",
+      "exerciseId": "pull-6",
+      "exerciseName": "Bizeps-Curls",
+      "topWeight": 27.5,
+      "topReps": 12,
+      "volume": 1320.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-28T18:00:00Z",
+      "exerciseId": "legs-1",
+      "exerciseName": "Kniebeugen",
+      "topWeight": 72.5,
+      "topReps": 6,
+      "volume": 1740.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-28T18:00:00Z",
+      "exerciseId": "legs-2",
+      "exerciseName": "Rumänisches Kreuzheben",
+      "topWeight": 70.0,
+      "topReps": 7,
+      "volume": 1960.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-28T18:00:00Z",
+      "exerciseId": "legs-3",
+      "exerciseName": "Beinpresse",
+      "topWeight": 130.0,
+      "topReps": 10,
+      "volume": 5200.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-28T18:00:00Z",
+      "exerciseId": "legs-4",
+      "exerciseName": "Beinbeuger",
+      "topWeight": 43.75,
+      "topReps": 12,
+      "volume": 1575.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-28T18:00:00Z",
+      "exerciseId": "legs-5",
+      "exerciseName": "Wadenheben",
+      "topWeight": 50.0,
+      "topReps": 15,
+      "volume": 3000.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-30T18:00:00Z",
+      "exerciseId": "push-1",
+      "exerciseName": "Bankdrücken",
+      "topWeight": 75.0,
+      "topReps": 8,
+      "volume": 2400.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-30T18:00:00Z",
+      "exerciseId": "push-2",
+      "exerciseName": "Schrägbankdrücken",
+      "topWeight": 50.0,
+      "topReps": 8,
+      "volume": 1600.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-30T18:00:00Z",
+      "exerciseId": "push-3",
+      "exerciseName": "Schulterdrücken",
+      "topWeight": 37.0,
+      "topReps": 10,
+      "volume": 1110.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-30T18:00:00Z",
+      "exerciseId": "push-4",
+      "exerciseName": "Seitheben",
+      "topWeight": 11.0,
+      "topReps": 11,
+      "volume": 363.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-08-30T18:00:00Z",
+      "exerciseId": "push-5",
+      "exerciseName": "Trizepsdrücken (Seil)",
+      "topWeight": 31.25,
+      "topReps": 12,
+      "volume": 1500.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-08-30T18:00:00Z",
+      "exerciseId": "push-6",
+      "exerciseName": "Trizeps Overhead Ext.",
+      "topWeight": 26.25,
+      "topReps": 12,
+      "volume": 945.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-01T18:00:00Z",
+      "exerciseId": "pull-1",
+      "exerciseName": "Kreuzheben",
+      "topWeight": 112.5,
+      "topReps": 5,
+      "volume": 1687.5,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-01T18:00:00Z",
+      "exerciseId": "pull-2",
+      "exerciseName": "Klimmzüge / Latzug",
+      "topWeight": 63.75,
+      "topReps": 7,
+      "volume": 1338.8,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-01T18:00:00Z",
+      "exerciseId": "pull-3",
+      "exerciseName": "Langhantel-Rudern",
+      "topWeight": 62.5,
+      "topReps": 8,
+      "volume": 1500.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-01T18:00:00Z",
+      "exerciseId": "pull-4",
+      "exerciseName": "Kabel-Rudern",
+      "topWeight": 50.0,
+      "topReps": 10,
+      "volume": 2000.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-09-01T18:00:00Z",
+      "exerciseId": "pull-5",
+      "exerciseName": "Face Pulls",
+      "topWeight": 36.25,
+      "topReps": 15,
+      "volume": 2175.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-09-01T18:00:00Z",
+      "exerciseId": "pull-6",
+      "exerciseName": "Bizeps-Curls",
+      "topWeight": 28.75,
+      "topReps": 10,
+      "volume": 862.5,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-04T18:00:00Z",
+      "exerciseId": "legs-1",
+      "exerciseName": "Kniebeugen",
+      "topWeight": 75.0,
+      "topReps": 6,
+      "volume": 1350.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-04T18:00:00Z",
+      "exerciseId": "legs-2",
+      "exerciseName": "Rumänisches Kreuzheben",
+      "topWeight": 72.5,
+      "topReps": 7,
+      "volume": 1522.5,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-04T18:00:00Z",
+      "exerciseId": "legs-3",
+      "exerciseName": "Beinpresse",
+      "topWeight": 132.5,
+      "topReps": 10,
+      "volume": 5300.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-09-04T18:00:00Z",
+      "exerciseId": "legs-4",
+      "exerciseName": "Beinbeuger",
+      "topWeight": 41.25,
+      "topReps": 12,
+      "volume": 1485.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-04T18:00:00Z",
+      "exerciseId": "legs-5",
+      "exerciseName": "Wadenheben",
+      "topWeight": 50.0,
+      "topReps": 14,
+      "volume": 2100.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-07T18:00:00Z",
+      "exerciseId": "push-1",
+      "exerciseName": "Bankdrücken",
+      "topWeight": 77.5,
+      "topReps": 6,
+      "volume": 1395.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-07T18:00:00Z",
+      "exerciseId": "push-2",
+      "exerciseName": "Schrägbankdrücken",
+      "topWeight": 52.5,
+      "topReps": 8,
+      "volume": 1260.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-07T18:00:00Z",
+      "exerciseId": "push-3",
+      "exerciseName": "Schulterdrücken",
+      "topWeight": 38.25,
+      "topReps": 8,
+      "volume": 1224.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-09-07T18:00:00Z",
+      "exerciseId": "push-4",
+      "exerciseName": "Seitheben",
+      "topWeight": 10.0,
+      "topReps": 12,
+      "volume": 480.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-09-07T18:00:00Z",
+      "exerciseId": "push-5",
+      "exerciseName": "Trizepsdrücken (Seil)",
+      "topWeight": 32.5,
+      "topReps": 12,
+      "volume": 1170.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-07T18:00:00Z",
+      "exerciseId": "push-6",
+      "exerciseName": "Trizeps Overhead Ext.",
+      "topWeight": 27.5,
+      "topReps": 12,
+      "volume": 990.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-09T18:00:00Z",
+      "exerciseId": "pull-1",
+      "exerciseName": "Kreuzheben",
+      "topWeight": 115.0,
+      "topReps": 5,
+      "volume": 1725.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-09T18:00:00Z",
+      "exerciseId": "pull-2",
+      "exerciseName": "Klimmzüge / Latzug",
+      "topWeight": 65.0,
+      "topReps": 8,
+      "volume": 1560.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-09T18:00:00Z",
+      "exerciseId": "pull-3",
+      "exerciseName": "Langhantel-Rudern",
+      "topWeight": 62.5,
+      "topReps": 8,
+      "volume": 1500.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-09T18:00:00Z",
+      "exerciseId": "pull-4",
+      "exerciseName": "Kabel-Rudern",
+      "topWeight": 51.25,
+      "topReps": 8,
+      "volume": 1230.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-09T18:00:00Z",
+      "exerciseId": "pull-5",
+      "exerciseName": "Face Pulls",
+      "topWeight": 37.5,
+      "topReps": 13,
+      "volume": 1462.5,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-09T18:00:00Z",
+      "exerciseId": "pull-6",
+      "exerciseName": "Bizeps-Curls",
+      "topWeight": 30.0,
+      "topReps": 12,
+      "volume": 1080.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-12T18:00:00Z",
+      "exerciseId": "legs-1",
+      "exerciseName": "Kniebeugen",
+      "topWeight": 77.5,
+      "topReps": 4,
+      "volume": 930.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-12T18:00:00Z",
+      "exerciseId": "legs-2",
+      "exerciseName": "Rumänisches Kreuzheben",
+      "topWeight": 67.5,
+      "topReps": 8,
+      "volume": 1620.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-12T18:00:00Z",
+      "exerciseId": "legs-3",
+      "exerciseName": "Beinpresse",
+      "topWeight": 135.0,
+      "topReps": 8,
+      "volume": 4320.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-09-12T18:00:00Z",
+      "exerciseId": "legs-4",
+      "exerciseName": "Beinbeuger",
+      "topWeight": 41.25,
+      "topReps": 12,
+      "volume": 1485.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-12T18:00:00Z",
+      "exerciseId": "legs-5",
+      "exerciseName": "Wadenheben",
+      "topWeight": 52.5,
+      "topReps": 15,
+      "volume": 2362.5,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-14T18:00:00Z",
+      "exerciseId": "push-1",
+      "exerciseName": "Bankdrücken",
+      "topWeight": 77.5,
+      "topReps": 8,
+      "volume": 1860.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-14T18:00:00Z",
+      "exerciseId": "push-2",
+      "exerciseName": "Schrägbankdrücken",
+      "topWeight": 55.0,
+      "topReps": 8,
+      "volume": 1320.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-14T18:00:00Z",
+      "exerciseId": "push-3",
+      "exerciseName": "Schulterdrücken",
+      "topWeight": 39.5,
+      "topReps": 9,
+      "volume": 1066.5,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-14T18:00:00Z",
+      "exerciseId": "push-4",
+      "exerciseName": "Seitheben",
+      "topWeight": 10.5,
+      "topReps": 11,
+      "volume": 462.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-09-14T18:00:00Z",
+      "exerciseId": "push-5",
+      "exerciseName": "Trizepsdrücken (Seil)",
+      "topWeight": 30.0,
+      "topReps": 12,
+      "volume": 1080.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-14T18:00:00Z",
+      "exerciseId": "push-6",
+      "exerciseName": "Trizeps Overhead Ext.",
+      "topWeight": 28.75,
+      "topReps": 12,
+      "volume": 1035.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-16T18:00:00Z",
+      "exerciseId": "pull-1",
+      "exerciseName": "Kreuzheben",
+      "topWeight": 115.0,
+      "topReps": 5,
+      "volume": 1725.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-16T18:00:00Z",
+      "exerciseId": "pull-2",
+      "exerciseName": "Klimmzüge / Latzug",
+      "topWeight": 66.25,
+      "topReps": 8,
+      "volume": 1590.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-16T18:00:00Z",
+      "exerciseId": "pull-3",
+      "exerciseName": "Langhantel-Rudern",
+      "topWeight": 57.5,
+      "topReps": 8,
+      "volume": 1380.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-16T18:00:00Z",
+      "exerciseId": "pull-4",
+      "exerciseName": "Kabel-Rudern",
+      "topWeight": 52.5,
+      "topReps": 10,
+      "volume": 1575.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-16T18:00:00Z",
+      "exerciseId": "pull-5",
+      "exerciseName": "Face Pulls",
+      "topWeight": 38.75,
+      "topReps": 15,
+      "volume": 1743.8,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-16T18:00:00Z",
+      "exerciseId": "pull-6",
+      "exerciseName": "Bizeps-Curls",
+      "topWeight": 31.25,
+      "topReps": 10,
+      "volume": 937.5,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-17T18:00:00Z",
+      "exerciseId": "legs-1",
+      "exerciseName": "Kniebeugen",
+      "topWeight": 72.5,
+      "topReps": 6,
+      "volume": 1305.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-17T18:00:00Z",
+      "exerciseId": "legs-2",
+      "exerciseName": "Rumänisches Kreuzheben",
+      "topWeight": 62.5,
+      "topReps": 8,
+      "volume": 1500.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-17T18:00:00Z",
+      "exerciseId": "legs-3",
+      "exerciseName": "Beinpresse",
+      "topWeight": 137.5,
+      "topReps": 10,
+      "volume": 4125.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-17T18:00:00Z",
+      "exerciseId": "legs-4",
+      "exerciseName": "Beinbeuger",
+      "topWeight": 40.0,
+      "topReps": 12,
+      "volume": 1440.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-17T18:00:00Z",
+      "exerciseId": "legs-5",
+      "exerciseName": "Wadenheben",
+      "topWeight": 55.0,
+      "topReps": 13,
+      "volume": 2145.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-18T18:00:00Z",
+      "exerciseId": "push-1",
+      "exerciseName": "Bankdrücken",
+      "topWeight": 80.0,
+      "topReps": 8,
+      "volume": 2560.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-09-18T18:00:00Z",
+      "exerciseId": "push-2",
+      "exerciseName": "Schrägbankdrücken",
+      "topWeight": 57.5,
+      "topReps": 8,
+      "volume": 1840.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-09-18T18:00:00Z",
+      "exerciseId": "push-3",
+      "exerciseName": "Schulterdrücken",
+      "topWeight": 40.75,
+      "topReps": 10,
+      "volume": 1630.0,
+      "sets": 4
+    },
+    {
+      "date": "2026-09-18T18:00:00Z",
+      "exerciseId": "push-4",
+      "exerciseName": "Seitheben",
+      "topWeight": 11.0,
+      "topReps": 12,
+      "volume": 396.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-18T18:00:00Z",
+      "exerciseId": "push-5",
+      "exerciseName": "Trizepsdrücken (Seil)",
+      "topWeight": 31.25,
+      "topReps": 12,
+      "volume": 1125.0,
+      "sets": 3
+    },
+    {
+      "date": "2026-09-18T18:00:00Z",
+      "exerciseId": "push-6",
+      "exerciseName": "Trizeps Overhead Ext.",
+      "topWeight": 30.0,
+      "topReps": 10,
+      "volume": 900.0,
+      "sets": 3
+    }
+  ]
+}

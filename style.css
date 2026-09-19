@@ -1,0 +1,233 @@
+/* BWS+ Fitness – Design-System (verbindlich lt. DESIGN_SYSTEM.md) */
+
+:root { color-scheme: dark; }
+
+html, body {
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+/* ---------- ExerciseCard ---------- */
+.exercise-card {
+  background: linear-gradient(180deg, #0F172A 0%, #0B1120 100%);
+  border: 1px solid #334155;            /* line */
+  border-radius: 1rem;                  /* 16px */
+  overflow: hidden;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .25), 0 8px 24px rgba(0, 0, 0, .35);
+  transition: border-color .15s ease, transform .05s ease;
+}
+.exercise-card:active { transform: scale(.995); }
+
+/* ---------- Chips & Icon-Buttons ---------- */
+.chip {
+  font-size: .75rem; font-weight: 600;
+  padding: .25rem .625rem;
+  border-radius: 9999px;
+  background: #1E293B; color: #94A3B8;
+}
+.chip.chip-accent  { background: rgba(14, 165, 233, .2);  color: #38bdf8; }
+.chip.chip-success { background: rgba(16, 185, 129, .2);  color: #34d399; }
+
+.icon-btn {
+  min-width: 44px; min-height: 44px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #64748B; border-radius: .75rem;
+  transition: color .15s ease, background .15s ease;
+}
+.icon-btn:hover { color: #38bdf8; }
+.icon-btn-danger:hover { color: #f87171; background: rgba(248, 113, 113, .1); }
+
+/* ---------- SetRow ---------- */
+.set-row {
+  display: grid;
+  grid-template-columns: 3rem 3rem 1fr 4.5rem 3rem;
+  gap: .5rem;
+  align-items: center;
+  padding: .5rem .75rem;
+  border-top: 1px solid #1E293B;        /* lineSoft */
+}
+.set-row.set-row-done { background: rgba(16, 185, 129, .08); }
+.set-row.set-row-done .stepper-val,
+.set-row.set-row-done .quick-tap { opacity: .5; text-decoration: line-through; }
+
+/* Satznummer / Typ-Umschalter */
+.set-num {
+  position: relative;
+  display: grid; place-items: center;
+  width: 3rem; height: 3rem; justify-self: center;
+  border-radius: .75rem;
+  background: #1E293B; border: 1px solid #334155;
+  color: #94A3B8; font-size: .85rem; font-weight: 700;
+  cursor: pointer; transition: all .15s ease;
+}
+.set-num:hover { border-color: #38bdf8; color: #fff; }
+.set-num-idx { line-height: 1; }
+.set-num.set-num-warmup { border-color: rgba(245, 158, 11, .45); color: #f59e0b; }
+.set-num.set-num-dropset { border-color: rgba(167, 139, 250, .45); color: #a78bfa; }
+.set-num.set-num-deload { border-color: rgba(148, 163, 184, .35); color: #94a3b8; }
+.set-num-abbr {
+  position: absolute; top: -.4rem; right: -.5rem;
+  background: #38bdf8; color: #06121a;
+  font-size: .55rem; font-weight: 800;
+  padding: .05rem .25rem; border-radius: 999px; line-height: 1;
+}
+.set-num-warmup .set-num-abbr  { background: #f59e0b; color: #1a1203; }
+.set-num-dropset .set-num-abbr { background: #a78bfa; color: #1a0b2e; }
+.set-num-deload .set-num-abbr  { background: #64748b; color: #0b1120; }
+
+/* Check-Button: massiv, rund, 48px, satte Grün-Füllung bei erledigt */
+.set-check {
+  width: 3rem; height: 3rem;
+  min-width: 48px; min-height: 48px;
+  justify-self: center;
+  border: 2px solid #334155;
+  border-radius: 9999px;
+  background: transparent;
+  cursor: pointer;
+  display: grid; place-items: center;
+  transition: all .15s ease;
+}
+.set-check::after {
+  content: ""; font-weight: 800; font-size: 1.25rem; line-height: 1;
+  opacity: 0; transform: scale(.4);
+  transition: all .15s ease;
+}
+.set-check[aria-pressed="true"] {
+  background: #10b981; border-color: #10b981;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, .18);
+}
+.set-check[aria-pressed="true"]::after {
+  content: "✓"; color: #022c22; opacity: 1; transform: scale(1);
+}
+
+/* Gewicht-Stepper (− / +2.5 kg) */
+.stepper {
+  display: grid; grid-template-columns: 2.25rem 1fr 2.5rem;
+  align-items: center;
+  background: #1E293B; border: 1px solid #334155; border-radius: .75rem;
+  overflow: hidden; min-height: 3rem;
+}
+.stepper-btn {
+  min-height: 3rem; font-weight: 700; font-size: .9rem; color: #94a3b8;
+  background: transparent; transition: all .15s ease;
+}
+.stepper-btn:hover { color: #38bdf8; background: rgba(14, 165, 233, .1); }
+.stepper-val {
+  width: 100%; min-width: 0;
+  text-align: center; font-weight: 700; font-size: 1.15rem;
+  color: #f8fafc; font-variant-numeric: tabular-nums;
+  background: transparent; border: none; outline: none;
+  border-left: 1px solid #334155; border-right: 1px solid #334155;
+  padding: 0 .25rem;
+}
+.stepper-val:focus { box-shadow: inset 0 0 0 1px #38bdf8; }
+.stepper-val::-webkit-outer-spin-button,
+.stepper-val::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.stepper-val { -moz-appearance: textfield; }
+
+/* Quick-Tap-Feld (Reps) */
+.quick-tap {
+  min-height: 3rem; width: 100%;
+  background: #1E293B; border: 1px solid #334155; border-radius: .75rem;
+  padding: 0 .25rem;
+  text-align: center;
+  color: #f8fafc; font-weight: 700; font-size: 1.15rem;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+  transition: all .15s ease;
+}
+.quick-tap:hover, .quick-tap:focus { border-color: #38bdf8; }
+.quick-tap::-webkit-outer-spin-button,
+.quick-tap::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.quick-tap { -moz-appearance: textfield; }
+
+/* Entfernen */
+.set-remove {
+  display: grid; place-items: center;
+  width: 3rem; height: 3rem; justify-self: center;
+  border-radius: .75rem; color: #64748b;
+  font-size: 1.35rem; line-height: 1; transition: all .15s ease;
+}
+.set-remove:hover { color: #f87171; background: rgba(248, 113, 113, .1); }
+
+/* ---------- RestTimer: schwebender Bottom Drawer ---------- */
+.rest-drawer {
+  display: flex; align-items: center; gap: 1rem;
+  background: rgba(15, 23, 42, .85);
+  backdrop-filter: blur(12px);
+  border: 1px solid #334155;
+  border-bottom: none;
+  border-radius: 1rem 1rem 0 0;
+  padding: .875rem 1.25rem calc(.875rem + env(safe-area-inset-bottom));
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, .4);
+}
+.rest-ring { position: relative; width: 4rem; height: 4rem; flex-shrink: 0; }
+.rest-ring-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.rest-ring-bg   { fill: none; stroke: #1E293B; stroke-width: 5; }
+.rest-ring-fill {
+  fill: none; stroke: #38bdf8; stroke-width: 5; stroke-linecap: round;
+  transition: stroke-dashoffset .3s linear, stroke .3s linear;
+}
+.rest-ring-fill.rest-ring-done { stroke: #10b981; }
+.rest-countdown {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  color: #38bdf8; font-weight: 800; font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+}
+.timer-btn {
+  min-height: 44px;
+  background: #1E293B; border: 1px solid #334155; border-radius: .75rem;
+  padding: .4rem .9rem; font-size: .8rem; color: #cbd5e1;
+  transition: all .15s ease;
+}
+.timer-btn:hover { border-color: #38bdf8; color: #fff; }
+.timer-btn-accent {
+  background: rgba(14, 165, 233, .15);
+  border-color: rgba(14, 165, 233, .4);
+  color: #38bdf8;
+}
+
+/* ---------- KPIDashboard ---------- */
+.kpi-card {
+  background: rgba(15, 23, 42, .6);
+  backdrop-filter: blur(8px);
+  border: 1px solid #1E293B;          /* border-slate-800 */
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex; flex-direction: column; gap: .25rem;
+}
+.kpi-label {
+  font-size: .6875rem; text-transform: uppercase;
+  letter-spacing: .08em; color: #64748b;
+}
+.kpi-value {
+  font-size: 1.5rem; font-weight: 700;
+  color: #f8fafc; font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.kpi-unit { font-size: .875rem; font-weight: 500; color: #94a3b8; }
+.trend {
+  align-self: flex-start;
+  font-size: .6875rem; font-weight: 600;
+  padding: .15rem .5rem; border-radius: 9999px;
+}
+.trend-up   { color: #34d399; background: rgba(16, 185, 129, .15); }
+.trend-down { color: #f87171; background: rgba(248, 113, 113, .12); }
+.trend-flat { color: #94a3b8; background: rgba(51, 65, 85, .5); }
+
+/* ---------- Avatar (Profil) ---------- */
+.avatar-placeholder {
+  width: 3rem; height: 3rem; flex-shrink: 0;
+  display: grid; place-items: center;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #38bdf8, #0284c7);
+  color: #fff; font-weight: 700; font-size: 1.25rem;
+}
+
+/* ---------- Sonstiges ---------- */
+.fade-in { animation: fadeIn .2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
