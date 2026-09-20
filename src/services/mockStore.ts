@@ -1,69 +1,65 @@
-// src/services/mockStore.ts
-// Lokaler Datenspeicher für den Mock-Auth-Service (LocalStorage).
-// ACHTUNG: Passwörter liegen hier im Klartext – NUR für den lokalen Mock.
+// Mock-Store für LocalStorage-basierte Auth-Daten (Mock-Umgebung)
 
-import type { UserProfile } from '../types';
-
-export interface StoredUser {
+type StoredUser = {
   id: string;
   email: string;
-  password: string; // Klartext – niemals in Produktion!
+  password: string;
   username: string;
-  profile: UserProfile;
-}
-
-const USERS_KEY = 'bwsplus:mock:users';
-const SESSION_KEY = 'bwsplus:mock:session';
-const SEED_KEY = 'bwsplus:mock:seeded';
-
-function readJSON<T>(key: string, fallback: T): T {
-  try {
-    const raw = localStorage.getItem(key);
-    return raw ? (JSON.parse(raw) as T) : fallback;
-  } catch {
-    return fallback;
-  }
-}
+  profile: {
+    user_id: string;
+    username: string;
+    target_goal: string;
+    starting_weight: number;
+    current_weight: number;
+    height: number;
+    created_at: string;
+  };
+};
 
 export const mockStore = {
+  _usersKey: 'mockUsers',
+  _sessionUserIdKey: 'mockSessionUserId',
+
   getUsers(): StoredUser[] {
-    return readJSON<StoredUser[]>(USERS_KEY, []);
+    const stored = localStorage.getItem(this._usersKey);
+    return stored ? JSON.parse(stored) : [];
   },
 
-  saveUsers(users: StoredUser[]): void {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  saveUsers(users: StoredUser[]) {
+    localStorage.setItem(this._usersKey, JSON.stringify(users));
   },
 
   getSessionUserId(): string | null {
-    return localStorage.getItem(SESSION_KEY);
+    return localStorage.getItem(this._sessionUserIdKey);
   },
 
-  setSessionUserId(id: string | null): void {
-    if (id === null) localStorage.removeItem(SESSION_KEY);
-    else localStorage.setItem(SESSION_KEY, id);
+  setSessionUserId(id: string | null) {
+    if (id === null) {
+      localStorage.removeItem(this._sessionUserIdKey);
+    } else {
+      localStorage.setItem(this._sessionUserIdKey, id);
+    }
   },
 
-  /** Legt einmalig einen Demo-Nutzer an, damit Login sofort testbar ist. */
-  seedDemoUser(): void {
-    if (localStorage.getItem(SEED_KEY)) return;
-    localStorage.setItem(SEED_KEY, '1');
-
-    const id = crypto.randomUUID();
-    const demo: StoredUser = {
-      id,
-      email: 'demo@bws.app',
-      password: 'demo1234',
-      username: 'Demo',
-      profile: {
-        user_id: id,
-        username: 'Demo',
-        target_goal: 'Muscle Gain',
-        starting_weight: 80,
-        current_weight: 76.8,
-        height: 180,
-        created_at: new Date().toISOString(),
-      },
-    };
-    this.saveUsers([demo]);
+  seedDemoUser() {
+    const users = this.getUsers();
+    if (!users.some(u => u.email === 'demo@fitness.com')) {
+      users.push({
+        id: 'demo-user-id',
+        email: 'demo@fitness.com',
+        password: '123456',
+        username: 'Demo User',
+        profile: {
+          user_id: 'demo-user-id',
+          username: 'Demo User',
+          target_goal: 'Muscle Gain',
+          starting_weight: 0,
+          current_weight: 0,
+          height: 0,
+          created_at: new Date().toISOString(),
+        },
+      });
+      this.saveUsers(users);
+    }
   },
 };

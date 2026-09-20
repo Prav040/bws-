@@ -1,4 +1,3 @@
-// src/services/mockAuthService.ts
 // Lokaler Mock-Auth-Service (LocalStorage) – gleiche Schnittstelle wie AuthService.
 
 import type { User, SignUpInput, IAuthService } from '../types';
