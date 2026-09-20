@@ -270,3 +270,17 @@
 ### Hinweise
 - Der Dokument-Klick-Listener wird nur bei offenem Panel registriert und beim
   Schließen entfernt (kein kumulatives Leak über re-renders).
+
+### Nachbesserung (2. Iteration)
+- **Bug:** Nach dem ersten Options-Klick klappte das Panel in Safari/WebKit
+  sofort wieder zu — Mehrfachauswahl damit unmöglich. Ursache: `render()`
+  ersetzt das DOM; beim Entfernen des fokussierten Elements feuert WebKit ein
+  `focusout` am alten (nicht mehr verbundenen) Element, das über `querySelector`
+  trotzdem das NEUE Panel schloss.
+- **Fix:** `focusout`-Handler ignoriert Ereignisse von nicht mehr verbundenen
+  Elementen (`!dropdown.isConnected`); nach Auswahl + Re-Render wird der Fokus
+  auf dem Trigger gehalten. Zusätzlich schließt das Panel jetzt auch beim
+  Klick auf Zeitraum-/Datums-/Bucket-Filter (explizit `filterOpen = false`).
+- Verifiziert: kompletter Klick-Durchlauf mit echten Maus-Events + simulierte
+  Safari-`focusout`-Sequenz — Panel bleibt offen (1→2→3 Muskelgruppen
+  wählbar), Klick außerhalb schließt, „Alle Muskelgruppen“ setzt zurück.

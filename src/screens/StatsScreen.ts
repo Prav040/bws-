@@ -512,6 +512,7 @@ export class StatsScreen {
           this.customMode = false;
           this.periodDays = v === 'all' ? null : Number(v);
         }
+        this.filterOpen = false; // Klick außerhalb des Dropdowns schließt das Panel
         this.render();
       });
     });
@@ -544,6 +545,11 @@ export class StatsScreen {
     });
 
     dropdown?.addEventListener('focusout', (e: FocusEvent) => {
+      // Nach einem re-render() hängt das alte dropdown-Element nicht mehr im DOM.
+      // Safari/WebKit feuert beim Entfernen des fokussierten Elements dennoch
+      // focusout am alten Element (relatedTarget=null) — sonst würde das neue
+      // Panel sofort wieder zugeklappt und Mehrfachauswahl unmöglich.
+      if (!dropdown.isConnected) return;
       if (dropdown.contains(e.relatedTarget as Node)) return;
       this.setFilterOpen(false);
     });
@@ -558,21 +564,28 @@ export class StatsScreen {
     // Klick außerhalb schließt (Listener nur aktiv, solange das Panel offen ist).
     this.bindDocumentClose();
 
+    // Bei offenem Panel (nach Auswahl + re-render) den Fokus im Dropdown halten,
+    // damit focusout nur bei echtem Verlassen des Dropdowns feuert.
+    if (this.filterOpen) trigger?.focus();
+
     this.container.querySelector('#date-from')?.addEventListener('change', (e) => {
       this.customFrom = (e.target as HTMLInputElement).value;
       this.customMode = true;
+      this.filterOpen = false;
       this.render();
     });
 
     this.container.querySelector('#date-to')?.addEventListener('change', (e) => {
       this.customTo = (e.target as HTMLInputElement).value;
       this.customMode = true;
+      this.filterOpen = false;
       this.render();
     });
 
     this.container.querySelectorAll('[data-bucket]').forEach((btn) => {
       btn.addEventListener('click', () => {
         this.chartBucket = btn.getAttribute('data-bucket') as 'week' | 'month' | 'year';
+        this.filterOpen = false;
         this.render();
       });
     });
