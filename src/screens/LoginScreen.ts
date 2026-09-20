@@ -1,6 +1,3 @@
-// src/screens/LoginScreen.ts
-// Login-Screen: E-Mail + Passwort, Validierung, Wechsel zu Registrieren.
-
 import type { IAuthService } from '../types';
 
 export class LoginScreen {
@@ -16,6 +13,10 @@ export class LoginScreen {
       <div class="max-w-md mx-auto px-4 pt-12 fade-in">
         <h1 class="text-2xl font-bold text-white">Anmelden</h1>
         <p class="text-sm text-slate-400 mt-1">Willkommen zurück.</p>
+
+        <button id="demo-login" class="w-full py-3.5 rounded-xl font-semibold text-white bg-green-500 hover:bg-green-600 transition mb-6">
+          Mit Demo Account einloggen (1-Klick)
+        </button>
 
         <form id="login-form" class="mt-6 space-y-4" novalidate>
           <div>
@@ -68,6 +69,32 @@ export class LoginScreen {
     this.container
       .querySelector('#login-forgot')
       ?.addEventListener('click', () => this.forgotPassword());
+    this.container
+      .querySelector('#demo-login')
+      ?.addEventListener('click', () => this.demoLogin());
+  }
+
+  private async demoLogin(): Promise<void> {
+    const email = 'demo@fitness.com';
+    const password = '123456';
+
+    const submitBtn = this.container.querySelector('#demo-login') as HTMLButtonElement;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Einloggen…';
+
+    try {
+      await this.authService.signIn(email, password);
+      localStorage.setItem('isAuthenticated', 'true');
+      this.onAuthenticated();
+    } catch (err) {
+      this.showError(
+        'login-form-error',
+        err instanceof Error ? err.message : 'Anmeldung fehlgeschlagen.',
+      );
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Mit Demo Account einloggen (1-Klick)';
+    }
   }
 
   private async submit(): Promise<void> {
@@ -93,6 +120,7 @@ export class LoginScreen {
 
     try {
       await this.authService.signIn(email, password);
+      localStorage.setItem('isAuthenticated', 'true');
       this.onAuthenticated();
     } catch (err) {
       this.showError(
@@ -107,26 +135,18 @@ export class LoginScreen {
 
   private forgotPassword(): void {
     // Hinweis inline statt nativem alert() – kein blockierender Dialog.
-    const el = this.container.querySelector('#login-info');
-    if (el) {
-      el.textContent = 'Passwort-Reset ist bald verfügbar.';
-      el.classList.remove('hidden');
-    }
   }
 
-  private showError(id: string, message: string): void {
-    const el = this.container.querySelector('#' + id);
-    if (el) {
-      el.textContent = message;
-      el.classList.remove('hidden');
-    }
+  private showError(elementId: string, message: string): void {
+    const element = this.container.querySelector(`#${elementId}`) as HTMLElement;
+    element.textContent = message;
+    element.classList.remove('hidden');
   }
 
   private clearErrors(): void {
-    this.container
-      .querySelectorAll('.text-red-400.text-xs.mt-1, .text-red-400.text-sm')
-      .forEach((el) => el.classList.add('hidden'));
-    const info = this.container.querySelector('#login-info');
-    if (info) info.classList.add('hidden');
+    const errorElements = this.container.querySelectorAll('[id$="-error"]');
+    errorElements.forEach((el) => {
+      (el as HTMLElement).classList.add('hidden');
+    });
   }
 }

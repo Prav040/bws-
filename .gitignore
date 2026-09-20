@@ -28,3 +28,6 @@ coverage/
 
 # Vite cache
 .vite/
+chat_history.json
+.env
+design/
