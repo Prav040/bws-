@@ -2,7 +2,8 @@
 // Haupteinstiegspunkt: Auth-Gate + Navigation (Login/Registrieren vs. Workout-App).
 
 import { createAuthService, createProfileService } from './services/serviceFactory';
-import { WorkoutStore } from './services/workoutStore';
+import { WorkoutStore, type WorkoutState } from './services/workoutStore';
+import { DEMO_USER } from './lib/demoUser';
 import { LoginScreen } from './screens/LoginScreen';
 import { RegisterScreen } from './screens/RegisterScreen';
 import { WorkoutListScreen } from './screens/WorkoutListScreen';
@@ -39,7 +40,6 @@ async function bootstrap(): Promise<void> {
       onOpenStats: () => showStats(),
       onOpenHistory: () => showHistory(),
       onOpenProfile: () => void showProfile(),
-      onLogout: () => void handleLogout(),
     }).mount();
   }
 
@@ -48,11 +48,19 @@ async function bootstrap(): Promise<void> {
   }
 
   function showStats(): void {
-    new StatsScreen(dashboard, store!, { onBack: showWorkoutList }).mount();
+    new StatsScreen(dashboard, store!, {
+      onWorkouts: showWorkoutList,
+      onHistory: showHistory,
+      onProfile: () => void showProfile(),
+    }).mount();
   }
 
   function showHistory(): void {
-    new HistoryScreen(dashboard, store!, { onBack: showWorkoutList }).mount();
+    new HistoryScreen(dashboard, store!, {
+      onWorkouts: showWorkoutList,
+      onStats: showStats,
+      onProfile: () => void showProfile(),
+    }).mount();
   }
 
   async function showProfile(): Promise<void> {
@@ -61,16 +69,45 @@ async function bootstrap(): Promise<void> {
       showLogin();
       return;
     }
-    new ProfileScreen(dashboard, authService, profileService, store!, showWorkoutList, () => {
-      store = null;
-      showLogin();
-    }).mount(user);
+    new ProfileScreen(
+      dashboard,
+      authService,
+      profileService,
+      store!,
+      {
+        onWorkouts: showWorkoutList,
+        onHistory: showHistory,
+        onStats: showStats,
+      },
+      () => {
+        store = null;
+        showLogin();
+      },
+    ).mount(user);
   }
 
-  async function handleLogout(): Promise<void> {
-    await authService.signOut();
-    store = null;
-    showLogin();
+  /**
+   * Lädt die Testdaten (public/testdata/seed-workouts.json) automatisch in den
+   * Demo-Account, sobald dieser noch keine eigenen Daten hat (nicht-destruktiv).
+   * Schlägt das Laden fehl, bleiben die Defaults erhalten.
+   */
+  async function seedDemoAccount(store: WorkoutStore): Promise<void> {
+    try {
+      const res = await fetch('/testdata/seed-workouts.json');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = (await res.json()) as Partial<WorkoutState>;
+      if (
+        Array.isArray(data.workouts) &&
+        Array.isArray(data.history) &&
+        Array.isArray(data.exerciseHistory)
+      ) {
+        store.seedDemoData(data as WorkoutState);
+      } else {
+        throw new Error('Unerwartetes Seed-Format');
+      }
+    } catch (err) {
+      console.warn('[demo] Testdaten konnten nicht geladen werden:', err);
+    }
   }
 
   async function showApp(): Promise<void> {
@@ -80,6 +117,10 @@ async function bootstrap(): Promise<void> {
       return;
     }
     store = new WorkoutStore(user.id);
+    // Demo-Account: beim ersten Login automatisch mit Testdaten befüllen.
+    if (user.email.trim().toLowerCase() === DEMO_USER.email && !store.hasPersistedData()) {
+      await seedDemoAccount(store);
+    }
     authRoot.classList.add('hidden');
     dashboard.classList.remove('hidden');
     showWorkoutList();

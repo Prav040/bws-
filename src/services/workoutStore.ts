@@ -29,6 +29,10 @@ const MUSCLE_GROUP_BY_NAME: Record<string, MuscleGroup> = {
   'Rumänisches Kreuzheben': 'hamstrings',
   'Beinbeuger': 'hamstrings',
   'Wadenheben': 'calves',
+  'Plank': 'core',
+  'Russian Twists': 'core',
+  'Hanging Leg Raises': 'core',
+  'Laufen': 'core',
 };
 
 function ex(
@@ -109,62 +113,6 @@ const DEFAULT_WORKOUTS: Workout[] = [
   },
 ];
 
-const DEFAULT_HISTORY: WorkoutSnapshot[] = [
-  {
-    id: 'snapshot-1',
-    workoutId: 'default-pull',
-    completedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-    exercises: [
-      { id: 'pull-1', name: 'Kreuzheben', sets: [{ reps: 5, weight: 120, type: 'normal' }, { reps: 5, weight: 140, type: 'normal' }] },
-      { id: 'pull-2', name: 'Klimmzüge / Latzug', sets: [{ reps: 8, weight: 80, type: 'normal' }] },
-    ],
-  },
-  {
-    id: 'snapshot-2',
-    workoutId: 'default-push',
-    completedAt: new Date(Date.now() - 86400000).toISOString(),
-    exercises: [
-      { id: 'push-1', name: 'Bankdrücken', sets: [{ reps: 8, weight: 100, type: 'normal' }, { reps: 8, weight: 110, type: 'normal' }] },
-      { id: 'push-3', name: 'Schulterdrücken', sets: [{ reps: 10, weight: 60, type: 'normal' }] },
-    ],
-  },
-];
-
-const DEFAULT_EXERCISE_HISTORY: ExerciseHistoryEntry[] = [
-  {
-    date: new Date(Date.now() - 86400000 * 2).toISOString(),
-    exerciseId: 'pull-1',
-    exerciseName: 'Kreuzheben',
-    reps: 5,
-    weight: 140,
-    muscleGroup: 'back',
-  },
-  {
-    date: new Date(Date.now() - 86400000 * 2).toISOString(),
-    exerciseId: 'pull-2',
-    exerciseName: 'Klimmzüge / Latzug',
-    reps: 8,
-    weight: 80,
-    muscleGroup: 'back',
-  },
-  {
-    date: new Date(Date.now() - 86400000).toISOString(),
-    exerciseId: 'push-1',
-    exerciseName: 'Bankdrücken',
-    reps: 8,
-    weight: 110,
-    muscleGroup: 'chest',
-  },
-  {
-    date: new Date(Date.now() - 86400000).toISOString(),
-    exerciseId: 'push-3',
-    exerciseName: 'Schulterdrücken',
-    reps: 10,
-    weight: 60,
-    muscleGroup: 'shoulders',
-  },
-];
-
 export class WorkoutStore {
   private key: string;
   private state: WorkoutState;
@@ -181,32 +129,167 @@ export class WorkoutStore {
     } catch {
       /* ignore – fallback auf Defaults */
     }
-    return { workouts: structuredClone(DEFAULT_WORKOUTS), history: DEFAULT_HISTORY, exerciseHistory: DEFAULT_EXERCISE_HISTORY };
+    return { workouts: structuredClone(DEFAULT_WORKOUTS), history: [], exerciseHistory: [] };
   }
 
-  /** Stellt sicher, dass ältere Daten vollständig sind (Satz-Typ, Muskelgruppe, Historie). */
+  /** True, wenn für diesen Nutzer bereits Daten im LocalStorage liegen. */
+  hasPersistedData(): boolean {
+    try {
+      return localStorage.getItem(this.key) !== null;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Spielt externe Testdaten ein (z. B. `public/testdata/seed-workouts.json`).
+   * Überschreibt den lokalen Zustand NUR, wenn dieser vorher leer war
+   * (Aufrufer prüft `hasPersistedData()` – nicht-destruktiv).
+   */
+  seedDemoData(data: WorkoutState): void {
+    const normalized = this.normalize(structuredClone(data));
+    this.shiftDatesToRecent(normalized);
+    this.state = normalized;
+    this.save();
+  }
+
+  /** Verschiebt alle Einträge so, dass der jüngste heute liegt (Demo bleibt aktuell). */
+  private shiftDatesToRecent(state: WorkoutState): void {
+    const timestamps = [
+      ...state.history.map((h) => Date.parse(h.date)),
+      ...state.exerciseHistory.map((e) => Date.parse(e.date)),
+    ].filter((t) => !Number.isNaN(t));
+    if (timestamps.length === 0) return;
+
+    const target = new Date();
+    target.setUTCHours(9, 0, 0, 0); // heute, 09:00 UTC → Kalendertag heute, Zeit plausibel
+    const delta = target.getTime() - Math.max(...timestamps);
+    if (delta === 0) return;
+
+    const shift = (d: string): string => new Date(Date.parse(d) + delta).toISOString();
+    state.history.forEach((h) => {
+      h.date = shift(h.date);
+    });
+    state.exerciseHistory.forEach((e) => {
+      e.date = shift(e.date);
+    });
+  }
+
+  /** Stellt sicher, dass ältere Daten vollständig sind (Satz-Typ, Muskelgruppe, Migration). */
   private normalize(state: WorkoutState): WorkoutState {
-    if (!state.workouts) state.workouts = structuredClone(DEFAULT_WORKOUTS);
-    if (!state.history) state.history = [];
-    if (!state.exerciseHistory) state.exerciseHistory = [];
-    state.workouts.forEach((w) =>
+    if (!state.workouts || !Array.isArray(state.workouts)) {
+      state.workouts = structuredClone(DEFAULT_WORKOUTS);
+    }
+    if (!state.history || !Array.isArray(state.history)) state.history = [];
+    if (!state.exerciseHistory || !Array.isArray(state.exerciseHistory)) state.exerciseHistory = [];
+
+    state.workouts.forEach((w) => {
+      if (!Array.isArray(w.exercises)) w.exercises = [];
       w.exercises.forEach((e) => {
-        if (!e.sets) e.sets = [];
+        if (!Array.isArray(e.sets)) e.sets = [];
         if (e.muscleGroup === undefined) {
           e.muscleGroup = MUSCLE_GROUP_BY_NAME[e.name] ?? null;
         }
         e.sets.forEach((s) => {
           if (!s.type) s.type = 'normal';
         });
-      }),
-    );
-    // Muskelgruppe in bestehenden Historie-Einträgen nachziehen.
-    state.exerciseHistory.forEach((h) => {
-      if (h.muscleGroup === undefined) {
-        h.muscleGroup = MUSCLE_GROUP_BY_NAME[h.exerciseName] ?? null;
-      }
+      });
     });
+
+    state.history = state.history.map((h) => this.migrateLegacySnapshot(h));
+    state.exerciseHistory = state.exerciseHistory.map((e) => this.migrateLegacyEntry(e));
     return state;
+  }
+
+  /**
+   * Migration: Alte Snapshots nutzten id/workoutId/completedAt und
+   * Übungs-Details mit reps/weight statt date/name/topWeight/….
+   */
+  private migrateLegacySnapshot(h: WorkoutSnapshot): WorkoutSnapshot {
+    if (typeof h.date === 'string') return h;
+
+    const legacy = h as unknown as {
+      workoutId?: string;
+      completedAt?: string;
+      name?: string;
+      totalSets?: number;
+      doneSets?: number;
+      volume?: number;
+      durationSec?: number;
+      exercises?: Array<{
+        id?: string;
+        name?: string;
+        sets?: Array<{ reps?: number | string; weight?: number | string }>;
+      }>;
+    };
+
+    const date = legacy.completedAt ?? new Date().toISOString();
+    const details: ExerciseHistoryEntry[] = (legacy.exercises ?? [])
+      .filter((e) => e && Array.isArray(e.sets) && e.sets.length > 0)
+      .map((e) => {
+        const sets = e.sets ?? [];
+        let topWeight = 0;
+        let topReps = 0;
+        let volume = 0;
+        sets.forEach((s) => {
+          const wt = Number(s.weight) || 0;
+          const rp = Number(s.reps) || 0;
+          volume += wt * rp;
+          if (wt > topWeight) {
+            topWeight = wt;
+            topReps = rp;
+          }
+        });
+        return {
+          date,
+          exerciseId: e.id ?? '',
+          exerciseName: e.name ?? 'Übung',
+          topWeight,
+          topReps,
+          volume,
+          sets: sets.length,
+          muscleGroup: MUSCLE_GROUP_BY_NAME[e.name ?? ''] ?? null,
+        };
+      });
+
+    return {
+      date,
+      name: legacy.name ?? 'Workout',
+      totalSets: legacy.totalSets ?? details.reduce((n, d) => n + d.sets, 0),
+      doneSets: legacy.doneSets ?? 0,
+      volume: legacy.volume ?? details.reduce((n, d) => n + d.volume, 0),
+      ...(legacy.durationSec !== undefined ? { durationSec: legacy.durationSec } : {}),
+      ...(details.length ? { exercises: details } : {}),
+    };
+  }
+
+  /** Migration: Alte Übungs-Einträge nutzten reps/weight statt topReps/topWeight. */
+  private migrateLegacyEntry(entry: ExerciseHistoryEntry): ExerciseHistoryEntry {
+    const legacy = entry as ExerciseHistoryEntry & {
+      reps?: number | string;
+      weight?: number | string;
+    };
+    if (legacy.topWeight === undefined && (legacy.reps !== undefined || legacy.weight !== undefined)) {
+      const weight = Number(legacy.weight) || 0;
+      const reps = Number(legacy.reps) || 0;
+      return {
+        date: entry.date,
+        exerciseId: entry.exerciseId,
+        exerciseName: entry.exerciseName,
+        topWeight: weight,
+        topReps: reps,
+        volume: legacy.volume ?? weight * reps,
+        sets: legacy.sets ?? 1,
+        muscleGroup:
+          entry.muscleGroup === undefined
+            ? MUSCLE_GROUP_BY_NAME[entry.exerciseName] ?? null
+            : entry.muscleGroup,
+      };
+    }
+    if (entry.muscleGroup === undefined) {
+      entry.muscleGroup = MUSCLE_GROUP_BY_NAME[entry.exerciseName] ?? null;
+    }
+    return entry;
   }
 
   private save(): void {
@@ -227,65 +310,74 @@ export class WorkoutStore {
     return this.state.history;
   }
 
-  getExerciseHistory(exerciseId?: string): ExerciseHistoryEntry[] {
-    if (!exerciseId) return this.state.exerciseHistory;
-    return this.state.exerciseHistory.filter((e) => e.exerciseId === exerciseId);
+  getExerciseHistory(): ExerciseHistoryEntry[] {
+    return this.state.exerciseHistory;
   }
 
+  /** Aggregierte Profil-Kennzahlen aus der abgeschlossenen Historie. */
   getProfileStats(): ProfileStats {
-    const totalWorkouts = this.state.history.length;
-    const historyDates = this.state.history.map((h) => new Date(h.completedAt).toISOString().slice(0, 10));
-    const uniqueDates = [...new Set(historyDates)];
-
-    let currentStreak = 0;
-    const today = new Date().toISOString().slice(0, 10);
-    if (uniqueDates.includes(today)) {
-      currentStreak = 1;
-      for (let i = 1; i <= 30; i++) {
-        const date = new Date(Date.now() - 86400000 * i).toISOString().slice(0, 10);
-        if (uniqueDates.includes(date)) currentStreak++;
-        else break;
-      }
+    const history = this.state.history;
+    if (history.length === 0) {
+      return { totalWorkouts: 0, currentStreak: 0, totalVolume: 0 };
     }
 
-    const totalVolume = this.state.exerciseHistory.reduce((sum, e) => sum + (e.reps * e.weight), 0);
+    const totalWorkouts = history.length;
+    const totalVolume = history.reduce((sum, h) => sum + (h.volume || 0), 0);
+
+    const days = new Set(history.map((h) => this.dayKey(new Date(h.date))));
+    let currentStreak = 0;
+    const cursor = new Date();
+    while (days.has(this.dayKey(cursor))) {
+      currentStreak += 1;
+      cursor.setDate(cursor.getDate() - 1);
+    }
+
     return { totalWorkouts, currentStreak, totalVolume };
   }
 
-  getMuscleVolume(from?: string, to?: string, muscleGroup?: MuscleGroup | null): MuscleGroupStat[] {
-    const stats: Record<string, { volume: number; sets: number; sessions: Set<string> }> = {};
+  /**
+   * Aggregiert Tonnage (kg), Sätze und Trainingseinheiten je Muskelgruppe
+   * im Zeitraum [from, to] (Epoche-ms). `from`/`to` optional (= gesamt).
+   */
+  getMuscleVolume(from?: number, to?: number): MuscleGroupStat[] {
+    const byGroup = new Map<string, { volume: number; sets: number; sessions: Set<string> }>();
+    for (const h of this.state.exerciseHistory) {
+      const ts = new Date(h.date).getTime();
+      if (from !== undefined && ts < from) continue;
+      if (to !== undefined && ts > to) continue;
 
-    this.state.exerciseHistory.forEach((e) => {
-      if (e.muscleGroup === null) return;
-      if (muscleGroup && e.muscleGroup !== muscleGroup) return;
+      const key = h.muscleGroup ?? 'Sonstige';
+      let agg = byGroup.get(key);
+      if (!agg) {
+        agg = { volume: 0, sets: 0, sessions: new Set() };
+        byGroup.set(key, agg);
+      }
+      agg.volume += h.volume || 0;
+      agg.sets += h.sets || 0;
+      agg.sessions.add(h.date); // dedupliziert über den gemeinsamen Abschluss-Zeitstempel
+    }
 
-      const date = e.date.slice(0, 10);
-      if (from && date < from) return;
-      if (to && date > to) return;
-
-      const key = e.muscleGroup;
-      if (!stats[key]) stats[key] = { volume: 0, sets: 0, sessions: new Set() };
-
-      stats[key].volume += e.reps * e.weight;
-      stats[key].sets += 1;
-      stats[key].sessions.add(e.date.slice(0, 10));
-    });
-
-    return Object.entries(stats).map(([group, { volume, sets, sessions }]) => ({
-      muscleGroup: group as MuscleGroup,
-      volume,
-      sets,
-      sessions: sessions.size,
-    }));
+    return [...byGroup.entries()]
+      .map(([group, a]) => ({
+        group,
+        volume: a.volume,
+        sets: a.sets,
+        sessions: a.sessions.size,
+      }))
+      .sort((a, b) => b.volume - a.volume);
   }
 
-  /* ---------- Mutieren ---------- */
+  private dayKey(d: Date): string {
+    return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+  }
 
-  saveWorkout(workout: Workout): void {
-    const existing = this.state.workouts.findIndex((w) => w.id === workout.id);
-    if (existing >= 0) this.state.workouts[existing] = workout;
-    else this.state.workouts.push(workout);
+  /* ---------- Workouts ---------- */
+
+  addWorkout(name: string): Workout {
+    const workout: Workout = { id: crypto.randomUUID(), name, exercises: [] };
+    this.state.workouts.push(workout);
     this.save();
+    return workout;
   }
 
   deleteWorkout(id: string): void {
@@ -293,43 +385,148 @@ export class WorkoutStore {
     this.save();
   }
 
-  completeWorkout(workoutId: string, exercises: Array<{ id: string; name: string; sets: WorkoutSet[] }>): void {
-    const workout = this.state.workouts.find((w) => w.id === workoutId);
-    if (!workout) return;
+  /* ---------- Übungen ---------- */
 
-    // Einträge in der Historie speichern.
-    const snapshot: WorkoutSnapshot = {
-      id: `snapshot-${Date.now()}`,
-      workoutId,
-      completedAt: new Date().toISOString(),
-      exercises: exercises.map((e) => ({
-        id: e.id,
-        name: e.name,
-        muscleGroup: workout.exercises.find((ex) => ex.id === e.id)?.muscleGroup ?? null,
-        sets: e.sets,
-      })),
-    };
-    this.state.history.unshift(snapshot);
-
-    // Übungs-Historie aktualisieren.
-    exercises.forEach((ex) => {
-      ex.sets.forEach((s) => {
-        if (s.type === 'warmup') return;
-
-        const muscleGroup = workout.exercises.find((e) => e.id === ex.id)?.muscleGroup ?? null;
-        this.state.exerciseHistory.unshift({
-          date: snapshot.completedAt,
-          exerciseId: ex.id,
-          exerciseName: ex.name,
-          reps: s.reps,
-          weight: s.weight,
-          muscleGroup,
-        });
-      });
-    });
-
-    // Workout zurücksetzen (als bekannt markieren).
-    workout.exercises.forEach((ex) => (ex.sets = []));
+  addExercise(workoutId: string, exercise: Exercise): void {
+    const w = this.getWorkout(workoutId);
+    if (!w) return;
+    w.exercises.push(exercise);
     this.save();
+  }
+
+  updateExercise(
+    workoutId: string,
+    exerciseId: string,
+    patch: Partial<Pick<Exercise, 'name' | 'targetReps' | 'restSec' | 'notes' | 'image' | 'muscleGroup'>>,
+  ): void {
+    const e = this.findExercise(workoutId, exerciseId);
+    if (!e) return;
+    Object.assign(e, patch);
+    this.save();
+  }
+
+  deleteExercise(workoutId: string, exerciseId: string): void {
+    const w = this.getWorkout(workoutId);
+    if (!w) return;
+    w.exercises = w.exercises.filter((x) => x.id !== exerciseId);
+    this.save();
+  }
+
+  /* ---------- Sätze ---------- */
+
+  private findExercise(workoutId: string, exerciseId: string): Exercise | undefined {
+    return this.getWorkout(workoutId)?.exercises.find((x) => x.id === exerciseId);
+  }
+
+  addSet(workoutId: string, exerciseId: string): void {
+    const e = this.findExercise(workoutId, exerciseId);
+    if (!e) return;
+    const last = e.sets[e.sets.length - 1];
+    e.sets.push({
+      weight: last ? last.weight : '',
+      reps: String(e.targetReps),
+      done: false,
+      type: 'normal',
+    });
+    this.save();
+  }
+
+  removeSet(workoutId: string, exerciseId: string, index: number): void {
+    const e = this.findExercise(workoutId, exerciseId);
+    if (!e) return;
+    e.sets.splice(index, 1);
+    this.save();
+  }
+
+  updateSet(
+    workoutId: string,
+    exerciseId: string,
+    index: number,
+    field: 'weight' | 'reps',
+    value: string,
+  ): void {
+    const e = this.findExercise(workoutId, exerciseId);
+    if (!e || !e.sets[index]) return;
+    e.sets[index][field] = value;
+    this.save();
+  }
+
+  /** Hakt einen Satz an/ab. Liefert den neuen done-Zustand (true = gerade abgehakt). */
+  toggleSet(workoutId: string, exerciseId: string, index: number): boolean {
+    const e = this.findExercise(workoutId, exerciseId);
+    if (!e || !e.sets[index]) return false;
+    e.sets[index].done = !e.sets[index].done;
+    this.save();
+    return e.sets[index].done;
+  }
+
+  setSetType(workoutId: string, exerciseId: string, index: number, type: SetType): void {
+    const e = this.findExercise(workoutId, exerciseId);
+    if (!e || !e.sets[index]) return;
+    e.sets[index].type = type;
+    this.save();
+  }
+
+  /* ---------- Abschluss ---------- */
+
+  completeWorkout(workoutId: string, durationSec?: number): WorkoutSnapshot | null {
+    const w = this.getWorkout(workoutId);
+    if (!w) return null;
+
+    const totalSets = w.exercises.reduce((n, e) => n + e.sets.length, 0);
+    const doneSets = w.exercises.reduce((n, e) => n + e.sets.filter((s) => s.done).length, 0);
+    const volume = w.exercises.reduce(
+      (sum, e) => sum + e.sets.reduce((s, set) => s + (Number(set.weight) || 0) * (Number(set.reps) || 0), 0),
+      0,
+    );
+
+    // Pro Übung einen Statistik-Eintrag schreiben (Warm-up-Sätze zählen nicht).
+    const now = new Date().toISOString();
+    const exercises: ExerciseHistoryEntry[] = [];
+    for (const e of w.exercises) {
+      const work = e.sets.filter((s) => s.type !== 'warmup');
+      if (work.length === 0) continue;
+      let topWeight = 0;
+      let topReps = 0;
+      let exVolume = 0;
+      for (const s of work) {
+        const wt = Number(s.weight) || 0;
+        const rp = Number(s.reps) || 0;
+        exVolume += wt * rp;
+        if (wt > topWeight) {
+          topWeight = wt;
+          topReps = rp;
+        }
+      }
+      exercises.push({
+        date: now,
+        exerciseId: e.id,
+        exerciseName: e.name,
+        topWeight,
+        topReps,
+        volume: exVolume,
+        sets: work.length,
+        muscleGroup: e.muscleGroup ?? null,
+      });
+    }
+
+    const snapshot: WorkoutSnapshot = {
+      date: now,
+      name: w.name,
+      totalSets,
+      doneSets,
+      volume,
+      ...(durationSec !== undefined ? { durationSec } : {}),
+      exercises,
+    };
+
+    this.state.history.unshift(snapshot);
+    this.state.exerciseHistory.unshift(...exercises);
+
+    // Workout für den nächsten Durchgang zurücksetzen (Gewichte/Wdh als Referenz behalten).
+    w.exercises.forEach((e) => e.sets.forEach((s) => (s.done = false)));
+    this.save();
+
+    return snapshot;
   }
 }

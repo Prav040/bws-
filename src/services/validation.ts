@@ -7,6 +7,7 @@ export type AuthErrorCode =
   | 'MISSING_USERNAME'
   | 'EMAIL_IN_USE'
   | 'INVALID_CREDENTIALS'
+  | 'EMAIL_NOT_CONFIRMED'
   | 'NOT_AUTHENTICATED'
   | 'UNKNOWN';
 

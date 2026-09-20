@@ -1,12 +1,16 @@
 // src/screens/HistoryScreen.ts
-// Verlaufs-Ansicht: Kalender (Monat) + Zeit/Dauer + Drill-down in Übungs-Details.
+// Verlaufs-Ansicht: Kalender (Monat), Tagesliste mit Drill-down und
+// Tages-Zusammenfassung (Volumen, Sätze, PRs, Einheiten) — Mockup-konform.
 
 import type { WorkoutSnapshot, ExerciseHistoryEntry } from '../types';
 import type { WorkoutStore } from '../services/workoutStore';
 import { escapeHtml, formatNumber } from '../lib/utils';
+import { tabBarHtml, bindTabBar, type TabBarActions } from '../components/TabBar';
 
 export interface HistoryCallbacks {
-  onBack: () => void;
+  onWorkouts: () => void;
+  onStats: () => void;
+  onProfile: () => void;
 }
 
 const WEEKDAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
@@ -65,6 +69,15 @@ export class HistoryScreen {
     this.render();
   }
 
+  private tabActions(): TabBarActions {
+    return {
+      onWorkouts: () => this.callbacks.onWorkouts(),
+      onHistory: () => {},
+      onStats: () => this.callbacks.onStats(),
+      onProfile: () => this.callbacks.onProfile(),
+    };
+  }
+
   /** Gruppiert alle Abschlüsse nach Kalendertag (YYYY-MM-DD). */
   private byDay(): Map<string, WorkoutSnapshot[]> {
     const map = new Map<string, WorkoutSnapshot[]>();
@@ -77,6 +90,54 @@ export class HistoryScreen {
     return map;
   }
 
+  /** Anzahl neuer PRs an diesem Tag (Übung besser als an allen früheren Tagen). */
+  private prCountForDay(dayKey: string): number {
+    const entries = this.store.getExerciseHistory();
+    const bestBefore = new Map<string, number>();
+    for (const e of entries) {
+      if (dayKeyOf(new Date(e.date)) >= dayKey) continue; // nur strikt frühere Tage
+      bestBefore.set(e.exerciseName, Math.max(bestBefore.get(e.exerciseName) ?? 0, e.topWeight));
+    }
+    let prs = 0;
+    for (const e of entries) {
+      if (dayKeyOf(new Date(e.date)) !== dayKey) continue;
+      if (e.topWeight > 0 && e.topWeight > (bestBefore.get(e.exerciseName) ?? 0)) prs++;
+    }
+    return prs;
+  }
+
+  private daySummary(selected: WorkoutSnapshot[], dayKey: string): string {
+    const volume = selected.reduce((s, h) => s + h.volume, 0);
+    const doneSets = selected.reduce((s, h) => s + h.doneSets, 0);
+    const totalSets = selected.reduce((s, h) => s + h.totalSets, 0);
+    const prs = this.prCountForDay(dayKey);
+
+    return `
+      <div class="grid grid-cols-2 gap-3 mt-4">
+        <div class="kpi-card">
+          <p class="kpi-label">Gesamtvolumen</p>
+          <p class="kpi-value">${formatNumber(volume, 0)}<span class="kpi-unit"> kg</span></p>
+          <span class="trend trend-flat">an diesem Tag</span>
+        </div>
+        <div class="kpi-card">
+          <p class="kpi-label">Sätze</p>
+          <p class="kpi-value">${doneSets}<span class="kpi-unit">/${totalSets}</span></p>
+          <span class="trend ${doneSets >= totalSets ? 'trend-up' : 'trend-flat'}">erledigt</span>
+        </div>
+        <div class="kpi-card">
+          <p class="kpi-label">Neue PRs</p>
+          <p class="kpi-value">${prs}</p>
+          <span class="trend ${prs > 0 ? 'trend-up' : 'trend-flat'}">Bestwerte</span>
+        </div>
+        <div class="kpi-card">
+          <p class="kpi-label">Trainingseinheiten</p>
+          <p class="kpi-value">${selected.length}</p>
+          <span class="trend trend-flat">Workouts</span>
+        </div>
+      </div>
+    `;
+  }
+
   private render(): void {
     const byDay = this.byDay();
     const hasAny = this.store.getHistory().length > 0;
@@ -85,9 +146,11 @@ export class HistoryScreen {
     this.container.innerHTML = `
       <div class="max-w-md mx-auto px-4 pb-32 pt-4 fade-in">
         <header class="flex items-center justify-between py-4">
-          <button id="back-btn" class="min-h-[44px] text-slate-400 hover:text-white text-sm">‹ Zurück</button>
-          <h1 class="text-lg font-bold text-white">Verlauf</h1>
-          <span class="w-10"></span>
+          <div>
+            <h1 class="text-xl font-bold text-white">Verlauf</h1>
+            <p class="text-xs text-slate-400 mt-0.5">${MONTHS[this.viewMonth]} ${this.viewYear}</p>
+          </div>
+          <span class="chip">${this.store.getHistory().length} Workouts</span>
         </header>
 
         ${
@@ -106,6 +169,7 @@ export class HistoryScreen {
                         <p class="text-slate-400 text-sm">Kein Training an diesem Tag.</p>
                       </div>`
                 }
+                ${selected.length ? this.daySummary(selected, this.selectedKey) : ''}
               </div>
             `
             : `<div class="rounded-xl border border-line bg-panel px-6 py-10 text-center mt-4">
@@ -115,6 +179,8 @@ export class HistoryScreen {
               </div>`
         }
       </div>
+
+      ${tabBarHtml('history', this.tabActions())}
     `;
 
     this.bind();
@@ -213,8 +279,6 @@ export class HistoryScreen {
   }
 
   private bind(): void {
-    this.container.querySelector('#back-btn')?.addEventListener('click', () => this.callbacks.onBack());
-
     this.container.querySelector('#cal-prev')?.addEventListener('click', () => {
       this.viewMonth -= 1;
       if (this.viewMonth < 0) {
@@ -248,5 +312,7 @@ export class HistoryScreen {
         this.render();
       });
     });
+
+    bindTabBar(this.container, this.tabActions());
   }
 }

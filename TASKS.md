@@ -16,106 +16,30 @@ Ergebnis (Erfolg oder Fehler) in `DEV_FEEDBACK.md`.
       `getProfileStats()` im Store, `createProfileService()`-Factory,
       `ProfileScreen` zeigt echte KPIs, Profil-Einstieg + Navigation. typecheck +
       build grün.
+- [x] **W3 — Verlauf als eigene Ansicht + Muskelgruppen-/Zeitfilter in der Statistik**
+      `HistoryScreen` mit Kalender + Drill-down, `MuscleGroup`-Union + Mapping,
+      Zeitraum-/Muskelgruppen-Filter, `getMuscleVolume()`. typecheck + build grün.
+- [x] **W4 — UI an das Mockup angleichen (design/mockup.png)**
+      Bottom-Tab-Bar (Workouts/Verlauf/Statistik/Profil) statt Header-Buttons;
+      Verlauf mit Tages-Zusammenfassung (Volumen, Sätze, PRs, Einheiten);
+      Statistik mit Gesamtvolumen-Trendkarte, Muskelgruppen-Donut,
+      Kraftentwicklungs-Chart (Woche/Monat/Jahr) und PR-Datum;
+      Profil mit Premium-Karte, Körpermaßen, Einstellungen und CSV-Export.
+      typecheck + build grün, im Browser verifiziert (siehe DEV_FEEDBACK).
 
 ---
 
 ## ACTIVE_TASK
 
 ### Titel
-W3 — Verlauf als eigene Ansicht + Muskelgruppen-/Zeitfilter in der Statistik
+Keine offene Aufgabe — W4 + W5 abgeschlossen (Ergebnisse in `DEV_FEEDBACK.md`).
+Nächste Kandidaten aus der Roadmap (Abschnitt F): Core Performance Tracking
+(W-11 RIR, W-12 1RM, W-13 Fail-Markierung, W-15 PO-Signal) oder
+Recovery & Periodisierung (T-07, PLAN-05, PLAN-06).
 
-### Ziel
-Zwei zusammenhängende Ausbauten der Analytik (nicht-destruktiv):
-
-1. **Verlauf** soll **nicht mehr inline** auf der Workout-Liste erscheinen,
-   sondern in eine eigene, **detailliertere Verlaufs-Ansicht** wandern, in der
-   man sich ein einzelnes abgeschlossenes Workout genauer ansehen kann.
-2. **Statistik** um einen **Zeitraum-Filter** und eine **Muskelgruppen-
-   Aufschlüsselung** erweitern: pro Muskelgruppe werden **Gesamtvolumen (kg)**
-   und **Anzahl Sätze** im gewählten Zeitraum angezeigt.
-
-### Referenzen
-- Anforderungen: T-03 (Verlauf/Historie), T-05 (30-/90-Tage-Fenster), T-06
-  (Tonnage/Volumen pro Muskelgruppe & Woche), NFR-MAINT-01.
-- Datenbasis: `src/services/workoutStore.ts` (`getHistory()` →
-  `WorkoutSnapshot[]`, `getExerciseHistory()` → `ExerciseHistoryEntry[]`).
-
-### Voraussetzung: Muskelgruppen einführen (fehlt heute komplett)
-`Exercise` und `ExerciseHistoryEntry` kennen keine Muskelgruppe. Erforderlich,
-bevor die Statistik aggregieren kann:
-
-- Neuer Union-Typ in `src/types.ts`:
-  `type MuscleGroup = 'chest' | 'back' | 'shoulders' | 'biceps' | 'triceps' | 'quads' | 'hamstrings' | 'glutes' | 'calves' | 'core';`
-- `Exercise` bekommt `muscleGroup: MuscleGroup | null` (null = nicht zugeordnet /
-  „Sonstige“).
-- **Statisches Mapping** (Name → primäre Gruppe) für die eingebauten Übungen:
-  - `chest`: Bankdrücken, Schrägbankdrücken
-  - `shoulders`: Schulterdrücken, Seitheben, Face Pulls
-  - `triceps`: Trizepsdrücken (Seil), Trizeps Overhead Ext.
-  - `back`: Kreuzheben, Klimmzüge / Latzug, Langhantel-Rudern, Kabel-Rudern
-  - `biceps`: Bizeps-Curls
-  - `quads`: Kniebeugen, Beinpresse
-  - `hamstrings`: Rumänisches Kreuzheben, Beinbeuger
-  - `calves`: Wadenheben
-  (Verbundübungen werden einer primären Gruppe zugeordnet — keine Mehrfach-Zuordnung.)
-- `normalize()` im Store zieht `muscleGroup` **nach** (Default-Übungen über das
-  Mapping; benutzerdefinierte/leere → `null`). So funktionieren auch bestehende
-  History-Einträge ohne Datenmigration.
-- `ExerciseEditor` bekommt ein Auswahlfeld für die Muskelgruppe (Dropdown, inkl.
-  „keine“) — damit der Nutzer eigene Übungen korrekt zuordnen kann.
-
-### Teil 1 — Verlauf als eigene, detaillierte Ansicht
-- **Workout-Liste:** die Inline-„Verlauf“-Sektion entfernen. Stattdessen einen
-  „Verlauf“-Einstieg (Header-Button neben Statistik/Profil), der eine neue
-  `HistoryScreen`-Ansicht öffnet.
-- **Neue `src/screens/HistoryScreen.ts`:** listet alle abgeschlossenen Workouts
-  chronologisch (Datum, Name, Sätze erledigt/gesamt, Volumen) mit klarem
-  Empty-State.
-- **Drill-down je Workout:** damit man die Details eines Eintrags ansehen kann,
-  wird `WorkoutSnapshot` um die Übungs-Einzelleistungen erweitert (z. B.
-  `exercises: ExerciseHistoryEntry[]`). `completeWorkout()` schreibt sie mit.
-  Für alte Snapshots ohne Details → Hinweis „keine Detaildaten“ anzeigen
-  (nicht-destruktiv, kein Datenverlust).
-- `main.ts`: `showHistory()` + Navigation (zurück zur Workout-Liste).
-
-### Teil 2 — Statistik: Zeitraum- & Muskelgruppen-Filter
-- **Zeitraum-Filter:** Auswahl oben (Presets: 7 / 30 / 90 Tage / Gesamt,
-  Default 30 Tage).
-- **Muskelgruppen-Filter:** Chips oder Dropdown („Alle“ + einzelne Gruppe).
-- **Aggregation je Muskelgruppe** über `exerciseHistory` im gewählten Zeitraum:
-  - `totalVolume` = Σ `volume` (kg) — Tonnage der Muskelgruppe,
-  - `totalSets` = Σ `sets`,
-  - optional `sessions` (Anzahl Trainingseinheiten in der Gruppe).
-- **Anzeige:** neue Karten-Block je Muskelgruppe mit „X kg · Y Sätze“ im
-  Zeitraum. Die **bestehende Übungs-/PR-Ansicht bleibt erhalten** (nicht löschen)
-  — die Muskelgruppen-Aggregation kommt ergänzend (z. B. als Abschnitt oberhalb).
-
-### Betroffene Dateien
-- `src/types.ts` (`MuscleGroup`, `Exercise.muscleGroup`, `WorkoutSnapshot.exercises`)
-- `src/services/workoutStore.ts` (Mapping, `normalize`, `completeWorkout`,
-  neue Aggregations-Methode `getMuscleVolume(from, to)` o. ä.)
-- `src/screens/HistoryScreen.ts` (neu)
-- `src/screens/WorkoutListScreen.ts` (Verlauf entfernen, Verlauf-Einstieg)
-- `src/screens/StatsScreen.ts` (Zeit-/Muskelgruppen-Filter + Aggregation)
-- `src/screens/ExerciseEditor.ts` (Muskelgruppen-Auswahl)
-- `src/main.ts` (Navigation/Navigation)
-
-### Abgrenzung (Out of Scope)
-- RPE/RIR (W-11), 1RM (W-12), Fail-Markierung (W-13), PO-Signal (W-15).
-- Recovery-Meter (T-07), Deload-Erkennung (PLAN-05), Mesocycles (PLAN-06).
-- CSV/PDF-Export (T-08), Fortschrittsfotos (T-04).
-- `IWorkoutService` / Supabase-Workout-Persistenz.
-
-### Definition of Done
-- [ ] Verlauf erscheint nicht mehr inline auf der Workout-Liste; eigener Verlaufs-Einstieg öffnet `HistoryScreen`.
-- [ ] Verlauf zeigt alle Workouts chronologisch; ein Eintrag ist auf Drill-down zu seinen Übungs-Details öffnenbar.
-- [ ] Neue abgeschlossene Workouts speichern ihre Übungs-Details; alte Einträge bleiben lesbar (Hinweis statt Crash).
-- [ ] `MuscleGroup` existiert; Default-Übungen sind über das Mapping zugeordnet, bestehende History wird nachgezogen; Auswahl im `ExerciseEditor`.
-- [ ] Statistik bietet Zeitraum- (7/30/90/Gesamt) und Muskelgruppen-Filter.
-- [ ] Pro Muskelgruppe werden Gesamtvolumen (kg) und Sätze im Zeitraum korrekt angezeigt (Übungs-PR-Ansicht bleibt erhalten).
-- [ ] `npm run typecheck` und `npm run build` laufen fehlerfrei durch.
-- [ ] Ergebnis in `DEV_FEEDBACK.md` dokumentiert (Erfolg mit Bestätigung der
-      beiden obigen Läufe ODER Fehler mit konkreter Beschreibung).
+### Hinweis
+Die Detailbeschreibungen der abgeschlossenen Aufgaben W3–W5 wurden hier entfernt
+und sind vollständig in `DEV_FEEDBACK.md` dokumentiert.
 
 ---
 

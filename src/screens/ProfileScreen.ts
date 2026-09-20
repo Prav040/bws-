@@ -1,9 +1,19 @@
 // src/screens/ProfileScreen.ts
-// Profil-Screen: Header, KPI-Dashboard und Abmelden — mit „Zurück"-Button.
+// Profil-Screen: Header, Premium-Karte, KPI-Dashboard, Körpermaße,
+// Einstellungen (inkl. CSV-Export) und Abmelden — Mockup-konform mit Tab-Bar.
 
 import type { User, UserProfile, IAuthService, IProfileService } from '../types';
 import type { WorkoutStore } from '../services/workoutStore';
 import { escapeHtml, formatNumber } from '../lib/utils';
+import { exportWorkoutData } from '../lib/export';
+import { DEMO_USER } from '../lib/demoUser';
+import { tabBarHtml, bindTabBar, type TabBarActions } from '../components/TabBar';
+
+export interface ProfileTabs {
+  onWorkouts: () => void;
+  onHistory: () => void;
+  onStats: () => void;
+}
 
 /* ------------------------------------------------------------------
    Helfer
@@ -41,31 +51,69 @@ export class ProfileScreen {
     private authService: IAuthService,
     private profileService: IProfileService,
     private store: WorkoutStore,
-    private onBack: () => void,
+    private tabs: ProfileTabs,
     private onLoggedOut: () => void,
   ) {}
+
+  private tabActions(): TabBarActions {
+    return {
+      onWorkouts: () => this.tabs.onWorkouts(),
+      onHistory: () => this.tabs.onHistory(),
+      onStats: () => this.tabs.onStats(),
+      onProfile: () => {},
+    };
+  }
 
   /** Einstiegspunkt: lädt das Profil und rendert den Screen. */
   async mount(user: User): Promise<void> {
     this.renderLoading();
 
+    let profile: UserProfile | null = null;
     try {
-      const profile = await this.profileService.getProfile(user.id);
-      if (!profile) {
-        this.renderError('Profil nicht gefunden.');
-        return;
-      }
-      this.render(profile);
+      profile = await this.profileService.getProfile(user.id);
     } catch {
-      this.renderError('Profil konnte nicht geladen werden.');
+      profile = null; // z. B. Tabelle fehlt noch – unten behandeln
     }
+
+    // Demo-Account: lokale Profil-Daten als Fallback, sobald das Backend
+    // (noch) kein Profil liefert; Upsert heilt sich selbst, sobald die
+    // profiles-Tabelle existiert.
+    if (!profile && user.email.trim().toLowerCase() === DEMO_USER.email) {
+      const demoProfile = this.demoFallbackProfile(user);
+      try {
+        await this.profileService.upsertOwnProfile(user.id, demoProfile);
+      } catch {
+        /* Tabelle fehlt noch – lokale Ansicht reicht */
+      }
+      this.render(demoProfile, true);
+      return;
+    }
+
+    if (!profile) {
+      this.renderError('Profil nicht gefunden.');
+      return;
+    }
+    this.render(profile, false);
+  }
+
+  /** Demo-Profilwerte (sichtbar als „Testdaten“, sobald der Fallback greift). */
+  private demoFallbackProfile(user: User): UserProfile {
+    return {
+      user_id: user.id,
+      username: 'Demo User',
+      target_goal: 'Muscle Gain',
+      starting_weight: 82.5,
+      current_weight: 80.2,
+      height: 178,
+      created_at: new Date().toISOString(),
+    };
   }
 
   /* ------------------------------------------------------------------
      Rendering
      ------------------------------------------------------------------ */
 
-  private render(profile: UserProfile): void {
+  private render(profile: UserProfile, fallback = false): void {
     const diff = formatWeightDiff(profile.current_weight, profile.starting_weight);
     const trendClass = weightTrend(profile);
     const stats = this.store.getProfileStats();
@@ -73,21 +121,33 @@ export class ProfileScreen {
     this.container.innerHTML = `
       <div class="max-w-md mx-auto px-4 pt-4 pb-32 fade-in">
 
-        ${this.topBar()}
-
         <!-- Header: Avatar, Name, Ziel -->
         <header class="flex items-center gap-4 py-4">
           <div class="avatar-placeholder">${initials(profile.username)}</div>
           <div>
             <h1 class="text-xl font-bold text-white">${escapeHtml(profile.username)}</h1>
-            <span class="inline-block mt-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-accent/20 text-accent-hi">
-              ${escapeHtml(profile.target_goal)}
-            </span>
+            <div class="flex items-center gap-1.5 mt-1">
+              <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full bg-accent/20 text-accent-hi">
+                ${escapeHtml(profile.target_goal)}
+              </span>
+              ${fallback ? '<span class="chip chip-accent">Testdaten</span>' : ''}
+            </div>
           </div>
         </header>
 
+        <!-- Premium-Karte (Status im Demo-/Testbetrieb) -->
+        <div class="rounded-2xl border border-line bg-panel p-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="font-semibold text-white text-sm">BWS+ Premium Abonnement</p>
+              <p class="text-xs text-slate-400 mt-0.5">Status</p>
+            </div>
+            <span class="chip chip-accent">Demo</span>
+          </div>
+        </div>
+
         <!-- KPI-Dashboard -->
-        <section class="grid grid-cols-2 gap-3 mt-2">
+        <section class="grid grid-cols-2 gap-3 mt-3">
           <div class="kpi-card">
             <p class="kpi-label">Gewicht</p>
             <p class="kpi-value">${formatNumber(profile.current_weight, 1)}<span class="kpi-unit"> kg</span></p>
@@ -110,54 +170,77 @@ export class ProfileScreen {
           </div>
         </section>
 
-        <!-- Aktionen -->
-        <button id="logout-btn"
-          class="w-full mt-6 py-3.5 rounded-xl font-semibold text-red-400 border border-red-500/30 bg-red-500/10 hover:bg-red-500/20 transition">
-          Abmelden
-        </button>
+        <!-- Körpermaße -->
+        <h2 class="text-sm font-semibold text-slate-300 mt-5 mb-2">Körpermaße</h2>
+        <div class="rounded-2xl border border-line bg-panel divide-y divide-lineSoft">
+          <div class="flex justify-between px-4 py-3 text-sm">
+            <span class="text-slate-400">Startgewicht</span>
+            <span class="text-white font-semibold tabular-nums">${formatNumber(profile.starting_weight, 1)} kg</span>
+          </div>
+          <div class="flex justify-between px-4 py-3 text-sm">
+            <span class="text-slate-400">Aktuelles Gewicht</span>
+            <span class="text-white font-semibold tabular-nums">${formatNumber(profile.current_weight, 1)} kg</span>
+          </div>
+          <div class="flex justify-between px-4 py-3 text-sm">
+            <span class="text-slate-400">Größe</span>
+            <span class="text-white font-semibold tabular-nums">${formatNumber(profile.height, 0)} cm</span>
+          </div>
+        </div>
+
+        <!-- Einstellungen -->
+        <h2 class="text-sm font-semibold text-slate-300 mt-5 mb-2">Einstellungen</h2>
+        <div class="space-y-2">
+          <div class="settings-row">
+            <span>Sprache</span>
+            <span class="text-slate-400 text-xs">Deutsch <span class="chip">Demnächst</span></span>
+          </div>
+          <div class="settings-row">
+            <span>Einheiten</span>
+            <span class="text-slate-400 text-xs">kg · metrisch <span class="chip">Demnächst</span></span>
+          </div>
+          <div class="settings-row">
+            <span>Gerätesynchronisation</span>
+            <span class="text-slate-400 text-xs">Aus <span class="chip">Demnächst</span></span>
+          </div>
+          <button id="export-btn" class="settings-row">
+            <span>Daten exportieren (CSV)</span>
+            <span class="text-accent-400 text-xs font-semibold">Herunterladen</span>
+          </button>
+          <button id="logout-btn" class="settings-row settings-row-danger">
+            <span>Abmelden</span>
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
       </div>
+
+      ${tabBarHtml('profile', this.tabActions())}
     `;
 
-    this.container
-      .querySelector('#logout-btn')
-      ?.addEventListener('click', () => this.handleLogout());
-    this.bindBack();
+    this.bind();
   }
 
   private renderLoading(): void {
     this.container.innerHTML = `
       <div class="max-w-md mx-auto px-4 pt-4">
-        ${this.topBar()}
         <p class="text-center text-slate-400 pt-16">Profil wird geladen…</p>
       </div>
     `;
-    this.bindBack();
   }
 
   private renderError(message: string): void {
     this.container.innerHTML = `
-      <div class="max-w-md mx-auto px-4 pt-4">
-        ${this.topBar()}
+      <div class="max-w-md mx-auto px-4 pt-4 pb-32">
         <p class="text-center text-slate-400 pt-16">${escapeHtml(message)}</p>
       </div>
+      ${tabBarHtml('profile', this.tabActions())}
     `;
-    this.bindBack();
+    bindTabBar(this.container, this.tabActions());
   }
 
-  /** Obere Leiste mit „Zurück"-Button (in jedem Zustand vorhanden). */
-  private topBar(): string {
-    return `
-      <div class="flex items-center gap-2 py-2">
-        <button id="back-btn" class="min-h-[44px] text-slate-400 hover:text-white text-sm">‹ Zurück</button>
-        <h1 class="text-sm font-semibold text-slate-300">Profil</h1>
-      </div>
-    `;
-  }
-
-  private bindBack(): void {
-    this.container
-      .querySelector('#back-btn')
-      ?.addEventListener('click', () => this.onBack());
+  private bind(): void {
+    this.container.querySelector('#logout-btn')?.addEventListener('click', () => this.handleLogout());
+    this.container.querySelector('#export-btn')?.addEventListener('click', () => exportWorkoutData(this.store));
+    bindTabBar(this.container, this.tabActions());
   }
 
   /* ------------------------------------------------------------------

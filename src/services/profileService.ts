@@ -26,4 +26,15 @@ export class ProfileService implements IProfileService {
 
     return data as UserProfile;
   }
+
+  /**
+   * Legt das eigene Profil an bzw. aktualisiert es (Upsert auf user_id).
+   * Funktioniert nur, solange RLS-Insert dem eingeloggten Nutzer erlaubt ist.
+   */
+  async upsertOwnProfile(userId: string, profile: UserProfile): Promise<void> {
+    const { error } = await this.client
+      .from('profiles')
+      .upsert({ ...profile, user_id: userId }, { onConflict: 'user_id' });
+    if (error) throw error;
+  }
 }

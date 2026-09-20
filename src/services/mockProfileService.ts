@@ -9,4 +9,12 @@ export class MockProfileService implements IProfileService {
     const user = mockStore.getUsers().find((u) => u.id === userId);
     return user ? user.profile : null;
   }
+
+  async upsertOwnProfile(userId: string, profile: UserProfile): Promise<void> {
+    const users = mockStore.getUsers();
+    const user = users.find((u) => u.id === userId);
+    if (!user) return;
+    user.profile = { ...profile, user_id: userId };
+    mockStore.saveUsers(users);
+  }
 }

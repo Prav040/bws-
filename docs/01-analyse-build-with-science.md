@@ -117,15 +117,15 @@ Kombination ist der Produkt-Verteidigungsmechanismus („ersetzt 3–4 Abonnemen
 
 | Fähigkeit | Original BWS+ | Stand im Repo |
 |-----------|---------------|----------------|
-| Auth (E-Mail + Passwort, Session) | ✅ | ✅ Mock + Supabase-Service (real noch nicht verdrahtet) |
+| Auth (E-Mail + Passwort, Session) | ✅ | ✅ Mock + Supabase-Auth (Factory wählt über `VITE_SUPABASE_*`; ohne `.env` → Mock) |
 | Workout-Logging (Sätze/Wdh/Gewicht) | ✅ | ✅ `WorkoutStore` (localStorage) |
 | Rest-Timer | ✅ | ✅ `restTimer` |
-| Übungs-/Workout-Vorlagen | ✅ | ⚠️ nur Default Push/Pull/Beine |
+| Übungs-/Workout-Vorlagen | ✅ | ⚠️ Default Push/Pull/Beine/Oberkörper/Core + Demo-Seed (`testdata/`) |
 | Progressive Overload (Adaption) | ✅ | ❌ nur Logging, keine Ziel-Vorgabe |
 | Ernährungspläne/Meal-Scanner | ✅ | ❌ fehlt |
 | Assessment-Quiz → Plan-Generator | ✅ | ❌ fehlt |
-| Fortschritts-Analytik (Charts) | ✅ | ⚠️ nur „Verlauf"-Snapshot |
-| Körperdaten-/Profil | ✅ | ⚠️ Profil-Form, KPIs als Platzhalter |
+| Fortschritts-Analytik (Charts) | ✅ | ⚠️ Verlauf (Kalender + Drill-down), Statistik (Zeitraum-/Muskelgruppen-Filter) |
+| Körperdaten-/Profil | ✅ | ⚠️ Profil-Form, KPIs echt (Workouts/Streak/Volumen) |
 | Education / KI-Assistent | ✅ | ❌ fehlt |
 | Health-/Fit-Integration | ✅ | ❌ fehlt |
 

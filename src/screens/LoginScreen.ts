@@ -1,4 +1,5 @@
 import type { IAuthService } from '../types';
+import { DEMO_USER } from '../lib/demoUser';
 
 export class LoginScreen {
   constructor(
@@ -75,8 +76,8 @@ export class LoginScreen {
   }
 
   private async demoLogin(): Promise<void> {
-    const email = 'demo@fitness.com';
-    const password = '123456';
+    const email = DEMO_USER.email;
+    const password = DEMO_USER.password;
 
     const submitBtn = this.container.querySelector('#demo-login') as HTMLButtonElement;
     submitBtn.disabled = true;

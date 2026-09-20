@@ -439,6 +439,61 @@ Kompakte Metrik-Karten mit feiner Kontur, dezent-dunklem, geblurrtem Hintergrund
 
 > **Regel:** Trend-Indikatoren zeigen **progressive Overload** — grüne Badges `↑ +X kg vs. letzte Woche` bei Steigerung, rot `↓` bei Rückgang, neutral bei gleich. Nie ohne Vergleichsbasis („vs. letzte Woche") einen Wert anzeigen.
 
+### 5.5 `TabBar` — Bottom-Navigation (Mockup-konform)
+
+Vier Tabs: Workouts / Verlauf / Statistik / Profil. Ersetzt die früheren
+Header-Buttons; das aktive Tab trägt `tab-active` (Cyan + 2px-Top-Kante).
+Touch-Targets ≥ 44px (`min-height: 56px`).
+
+```html
+<nav class="tab-bar" aria-label="Hauptnavigation">
+  <div class="tab-bar-inner">
+    <button data-tab="workouts" class="tab-btn tab-active" aria-current="page">
+      <span class="tab-icon" aria-hidden="true">🏋️</span><span>Workouts</span>
+    </button>
+    <!-- … history / stats / profile analog -->
+  </div>
+</nav>
+```
+
+**CSS (`style.css`):**
+
+```css
+.tab-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+  background: rgba(2, 6, 23, .92);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid #1E293B;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.tab-bar-inner { max-width: 28rem; margin: 0 auto;
+                 display: grid; grid-template-columns: repeat(4, 1fr); }
+.tab-btn { min-height: 56px; display: flex; flex-direction: column;
+           align-items: center; justify-content: center; gap: 2px;
+           color: #64748b; font-size: .625rem; font-weight: 600; }
+.tab-btn .tab-icon { font-size: 1.05rem; line-height: 1; opacity: .85; filter: grayscale(1); }
+.tab-btn.tab-active { color: #38bdf8; box-shadow: inset 0 2px 0 #0ea5e9; }
+.tab-btn.tab-active .tab-icon { opacity: 1; filter: none; }
+```
+
+> **Regel:** Die Tab-Bar erscheint auf Workouts/Verlauf/Statistik/Profil
+> (`src/components/TabBar.ts`, `tabBarHtml()` + `bindTabBar()`). Nur die
+> Workout-Logger-Ansicht behält ihren „‹ Zurück“-Button (kein Tab).
+
+### 5.6 Diagramme (Donut + Linien, dependency-frei)
+
+SVG-Diagramme aus `src/lib/charts.ts`, Farben ausschließlich aus der
+Palette `CHART_COLORS` (Token-Ableitungen). Kein Chart-Framework.
+
+- **Donut** (`donutChart(slices, size)`): Segmente als `stroke-dasharray`-Kreise,
+  zentrale Anzeige „X kg gesamt“; Legende separat mit `.legend-dot`.
+- **Linien-Chart** (`lineChart(series, xLabels, height)`): mehrere Serien,
+  `null`-Werte erzeugen Lücken; horizontale Gridlines `line-chart-grid`,
+  Achsenbeschriftung `line-chart-axis` (erste/letzte Bucket-Beschriftung).
+
+> **Regel:** Charts zeigen ausschließlich reale Daten aus dem `WorkoutStore` —
+> keine erfundenen Verläufe. Ohne Daten ein Hinweis-Text statt leerem SVG.
+
 ---
 
 ## 6. Abschluss & Umsetzung

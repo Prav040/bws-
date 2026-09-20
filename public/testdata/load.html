@@ -3,14 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Testdaten laden — BWS+ Fitness</title>
+<title>Testdaten — BWS+ Fitness</title>
 <style>
   body { font-family: system-ui, sans-serif; background: #06090d; color: #e2e8f0;
          min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 24px; }
   .card { background: #0b1016; border: 1px solid #1c2630; border-radius: 16px;
           padding: 32px; max-width: 420px; width: 100%; text-align: center; }
   .ok { color: #38bdf8; font-weight: 600; }
-  .err { color: #f87171; }
   a, button { color: #0ea5e9; }
   a.link { display: inline-block; margin-top: 16px; padding: 12px 20px; border-radius: 10px;
            background: #0ea5e9; color: #04121c; font-weight: 600; text-decoration: none; }
@@ -18,34 +17,30 @@
 </style>
 </head>
 <body>
-<div class="card" id="card">
-  <p>Lade Testdaten…</p>
+<div class="card">
+  <p>Die Testdaten werden seit Kurzem <b>automatisch</b> geladen: Einfach in der App
+     den Demo-Account verwenden (<b>demo@bws.app</b> / <b>demo1234</b>, oder den
+     1-Klick-Button auf dem Login-Screen) — beim ersten Login wird
+     <code>seed-workouts.json</code> in den Account gespielt.</p>
+  <p>Diese Seite ist nur noch als manueller Reset-Helfer nützlich:</p>
+  <button id="reset" class="link" style="background:#334155">Demo-Daten zurücksetzen</button>
+  <p id="status" class="ok" style="margin-top:12px"></p>
 </div>
 <script type="module">
-  const card = document.getElementById('card');
-  function show(html) { card.innerHTML = html; }
-  try {
-    const users = JSON.parse(localStorage.getItem('bwsplus:mock:users') || '[]');
-    const uid = users[0] ? users[0].id : null;
-    if (!uid) {
-      show('<p>Noch kein lokaler Nutzer vorhanden.</p>' +
-        '<p>Öffne zuerst die App einmal (<a href="/" class="link">Zur App</a>), ' +
-        'damit der Demo-Nutzer angelegt wird. Danach diese Seite erneut aufrufen ' +
-        '(oder dich als <b>demo@bws.app / demo1234</b> anmelden).</p>');
-    } else {
-      const res = await fetch('/testdata/seed-workouts.json');
-      if (!res.ok) throw new Error('Seed nicht gefunden (HTTP ' + res.status + ')');
-      const seed = await res.json();
-      localStorage.setItem('bwsplus:workouts:' + uid, JSON.stringify(seed));
-      show('<p class="ok">✅ Testdaten geladen!</p>' +
-        '<p>' + seed.history.length + ' Workouts · ' + seed.exerciseHistory.length +
-        ' Übungs-Einträge über die letzten Wochen.</p>' +
-        '<p>Wechsle nun zur App und lade sie neu, dann zeigen Statistik und Profil die Daten.</p>' +
-        '<a href="/" class="link">Zur App</a>');
+  const status = document.getElementById('status');
+  document.getElementById('reset').addEventListener('click', () => {
+    try {
+      // Mock-Modus: Demo-Nutzer-ID ist fest. Im Real-Modus alle bwsplus-Keys des Demo-Users löschen.
+      let removed = 0;
+      localStorage.removeItem('bwsplus:workouts:demo-user-id');
+      for (const key of Object.keys(localStorage)) {
+        if (key.startsWith('bwsplus:workouts:')) { localStorage.removeItem(key); removed++; }
+      }
+      status.textContent = '✅ Zurückgesetzt (' + (removed + 1) + ' Keys). Beim nächsten Demo-Login wird neu geseedet.';
+    } catch (e) {
+      status.textContent = 'Fehler: ' + String(e);
     }
-  } catch (e) {
-    show('<p class="err">Fehler: ' + String(e) + '</p>');
-  }
+  });
 </script>
 </body>
 </html>

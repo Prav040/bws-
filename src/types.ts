@@ -39,6 +39,8 @@ export interface IAuthService {
 /** Schnittstelle des Profil-Service (real + mock). */
 export interface IProfileService {
   getProfile(userId: string): Promise<UserProfile | null>;
+  /** Legt das eigene Profil an/aktualisiert es (RLS: nur eigene Zeile). */
+  upsertOwnProfile(userId: string, profile: UserProfile): Promise<void>;
 }
 
 /* ------------------------------------------------------------------

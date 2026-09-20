@@ -1,16 +1,16 @@
 // src/screens/WorkoutListScreen.ts
-// Übersicht aller Workouts + Erstellen + Verlauf/Statistik/Profil + Logout.
+// Übersicht aller Workouts + Erstellen; Navigation über die Bottom-Tab-Bar.
 
 import type { Workout } from '../types';
 import type { WorkoutStore } from '../services/workoutStore';
 import { escapeHtml } from '../lib/utils';
+import { tabBarHtml, bindTabBar, type TabBarActions } from '../components/TabBar';
 
 export interface WorkoutListCallbacks {
   onOpenWorkout: (workoutId: string) => void;
   onOpenStats: () => void;
   onOpenHistory: () => void;
   onOpenProfile: () => void;
-  onLogout: () => void;
 }
 
 export class WorkoutListScreen {
@@ -34,12 +34,7 @@ export class WorkoutListScreen {
             <h1 class="text-xl font-bold text-white">BWS+ <span class="text-accent-400">Fitness</span></h1>
             <p class="text-xs text-slate-400 mt-0.5">Meine Workouts</p>
           </div>
-          <div class="flex items-center gap-1">
-            <button id="history-btn" class="min-h-[44px] text-slate-400 hover:text-accent-400 text-sm px-1.5 rounded-lg transition">📋 Verlauf</button>
-            <button id="stats-btn" class="min-h-[44px] text-slate-400 hover:text-accent-400 text-sm px-1.5 rounded-lg transition">📊 Statistik</button>
-            <button id="profile-btn" class="min-h-[44px] text-slate-400 hover:text-accent-400 text-sm px-1.5 rounded-lg transition">👤 Profil</button>
-            <button id="logout-btn" class="min-h-[44px] text-slate-400 hover:text-red-400 text-sm px-1.5 rounded-lg transition">Abmelden</button>
-          </div>
+          <span class="chip">${workouts.length} Pläne</span>
         </header>
 
         <div class="space-y-3 mt-2">
@@ -50,9 +45,20 @@ export class WorkoutListScreen {
           + Neues Workout
         </button>
       </div>
+
+      ${tabBarHtml('workouts', this.tabActions())}
     `;
 
     this.bind();
+  }
+
+  private tabActions(): TabBarActions {
+    return {
+      onWorkouts: () => {},
+      onHistory: () => this.callbacks.onOpenHistory(),
+      onStats: () => this.callbacks.onOpenStats(),
+      onProfile: () => this.callbacks.onOpenProfile(),
+    };
   }
 
   private workoutCard(w: Workout): string {
@@ -85,18 +91,7 @@ export class WorkoutListScreen {
     this.container
       .querySelector('#add-workout-btn')
       ?.addEventListener('click', () => this.promptAddWorkout());
-    this.container
-      .querySelector('#profile-btn')
-      ?.addEventListener('click', () => this.callbacks.onOpenProfile());
-    this.container
-      .querySelector('#stats-btn')
-      ?.addEventListener('click', () => this.callbacks.onOpenStats());
-    this.container
-      .querySelector('#history-btn')
-      ?.addEventListener('click', () => this.callbacks.onOpenHistory());
-    this.container
-      .querySelector('#logout-btn')
-      ?.addEventListener('click', () => this.callbacks.onLogout());
+    bindTabBar(this.container, this.tabActions());
   }
 
   private promptAddWorkout(): void {

@@ -117,6 +117,8 @@ src/
 │   └── mockStore.ts           LocalStorage-Speicher für Mock-Auth
 ├── lib/
 │   ├── supabase.ts            Client-Factory (env-basiert)
+│   ├── demoUser.ts            Demo-Account-Definition (eine Quelle: Mock-Seed, Login, Testdaten)
+│   ├── muscleGroups.ts        Muskelgruppen-Labels/-Optionen
 │   └── utils.ts               escapeHtml, formatDuration
 └── types.ts                 Typen & Interface-Verträge
 ```
@@ -127,6 +129,9 @@ src/
   lokalen `WorkoutStore`-Implementierung eine Supabase-Implementierung
   (mit Offline-Queue) entsteht — gleiche Verträge wie beim Auth-Service.
 - `escapeHtml` für alles, was nutzergesteuert in `innerHTML` fließt (XSS).
+- Demo-/Testdaten: `main.ts` seedet den Demo-Account (`demo@bws.app`) beim
+  ersten Login automatisch aus `public/testdata/seed-workouts.json`
+  (`seedDemoData()` im Store, nicht-destruktiv, Datums-Shift auf heute).
 
 ## 6. Service-Verträge (Interfaces)
 
@@ -233,7 +238,7 @@ flowchart LR
 
 | Lücke | Nötig | Referenz |
 |-------|-------|----------|
-| Supabase real verdrahten (statt MockAuth in `main.ts`) | Factory je `VITE_*`-Env; Fallback Mock | ADR-3 |
+| ✅ erledigt | Supabase real verdrahtet (W1): Factory je `VITE_*`-Env; Fallback Mock (ADR-3) | ADR-3 |
 | `IWorkoutService` + Supabase-Workout-Implementierung | Schema §4 + Offline-Queue | W-* |
 | Workout-Sync (localStorage ↔ Postgres) | `sync()` idempotent (Upsert via ID) | NFR-OFF-01 |
 | Workout-Schema/DB fehlt | Migration + RLS auf neuen Tabellen | NFR-SEC-02 |

@@ -64,8 +64,16 @@ export class AuthService implements IAuthService {
       });
 
       if (error) {
+        const msg = (error.message ?? '').toLowerCase();
+        // Nicht bestätigte E-Mail ist kein Problem falscher Zugangsdaten.
+        if (msg.includes('not confirmed') || msg.includes('confirm')) {
+          throw new AuthError(
+            'EMAIL_NOT_CONFIRMED',
+            'Diese E-Mail-Adresse ist noch nicht bestätigt. Bitte bestätige sie zuerst (Supabase-Dashboard → Authentication → Users → Confirm user).',
+          );
+        }
         // Supabase wirft bei falschen Zugangsdaten einen generischen Fehler.
-        if (error.status === 400 || error.message.toLowerCase().includes('invalid')) {
+        if (error.status === 400 || msg.includes('invalid')) {
           throw new AuthError('INVALID_CREDENTIALS', 'E-Mail oder Passwort ist falsch.');
         }
         throw error;
@@ -123,6 +131,12 @@ export class AuthService implements IAuthService {
 
       if (msg.includes('already registered') || msg.includes('already been registered')) {
         return new AuthError('EMAIL_IN_USE', 'Diese E-Mail-Adresse ist bereits registriert.');
+      }
+      if (msg.includes('not confirmed') || msg.includes('confirm')) {
+        return new AuthError(
+          'EMAIL_NOT_CONFIRMED',
+          'Diese E-Mail-Adresse ist noch nicht bestätigt. Bitte bestätige sie zuerst (Supabase-Dashboard → Authentication → Users → Confirm user).',
+        );
       }
       if (msg.includes('invalid login credentials') || msg.includes('invalid credentials')) {
         return new AuthError('INVALID_CREDENTIALS', 'E-Mail oder Passwort ist falsch.');

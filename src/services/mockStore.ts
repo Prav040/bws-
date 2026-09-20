@@ -1,6 +1,9 @@
 // Mock-Store für LocalStorage-basierte Auth-Daten (Mock-Umgebung)
 
-type StoredUser = {
+import type { TargetGoal } from '../types';
+import { DEMO_USER } from '../lib/demoUser';
+
+export type StoredUser = {
   id: string;
   email: string;
   password: string;
@@ -8,7 +11,7 @@ type StoredUser = {
   profile: {
     user_id: string;
     username: string;
-    target_goal: string;
+    target_goal: TargetGoal;
     starting_weight: number;
     current_weight: number;
     height: number;
@@ -43,19 +46,19 @@ export const mockStore = {
 
   seedDemoUser() {
     const users = this.getUsers();
-    if (!users.some(u => u.email === 'demo@fitness.com')) {
+    if (!users.some((u) => u.email === DEMO_USER.email)) {
       users.push({
         id: 'demo-user-id',
-        email: 'demo@fitness.com',
-        password: '123456',
+        email: DEMO_USER.email,
+        password: DEMO_USER.password,
         username: 'Demo User',
         profile: {
           user_id: 'demo-user-id',
           username: 'Demo User',
           target_goal: 'Muscle Gain',
-          starting_weight: 0,
-          current_weight: 0,
-          height: 0,
+          starting_weight: 82.5,
+          current_weight: 80.2,
+          height: 178,
           created_at: new Date().toISOString(),
         },
       });
