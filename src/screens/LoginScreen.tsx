@@ -9,26 +9,44 @@ interface LoginProps {
 }
 
 export class LoginScreen extends Component<LoginProps> {
+  private loginForm: HTMLFormElement;
+  private emailInput: HTMLInputElement;
+  private passwordInput: HTMLInputElement;
+  private loginButton: HTMLButtonElement;
   private demoButton: HTMLButtonElement;
   private errorMessage: HTMLElement;
 
   constructor(props: LoginProps) {
     super(props);
-    this.errorMessage = this.createElement('div', { class: 'text-red-500' });
-    this.demoButton = this.createDemoButton();
-  }
-
-  private createDemoButton(): HTMLButtonElement {
-    const demoButton = this.createElement('button', {
-      type: 'button',
+    this.emailInput = this.createElement('input', {
+      type: 'email',
+      placeholder: 'E-Mail',
+      class: 'p-2 border rounded',
+    });
+    this.passwordInput = this.createElement('input', {
+      type: 'password',
+      placeholder: 'Passwort',
+      class: 'p-2 border rounded',
+    });
+    this.loginButton = this.createElement('button', {
+      type: 'submit',
       class: 'bg-blue-500 text-white p-2 rounded',
+      textContent: 'Anmelden',
+    });
+    this.demoButton = this.createElement('button', {
+      type: 'button',
+      class: 'bg-gray-500 text-white p-2 rounded',
       textContent: 'Als Demo-User anmelden',
-      onclick: () => {
-        this.handleSubmit('demo@example.com', 'Demo1234');
+      onclick: () => this.handleSubmit('demo@example.com', 'Demo1234'),
+    });
+    this.errorMessage = this.createElement('div', { class: 'text-red-500' });
+    this.loginForm = this.createElement('form', {
+      class: 'space-y-4',
+      onsubmit: (event) => {
+        event.preventDefault();
+        this.handleSubmit(this.emailInput.value, this.passwordInput.value);
       },
     });
-
-    return demoButton;
   }
 
   private async handleSubmit(email: string, password: string): Promise<void> {
@@ -49,6 +67,10 @@ export class LoginScreen extends Component<LoginProps> {
     this.props.parent.appendChild(
       this.createElement('h2', { class: 'text-2xl font-bold', textContent: 'Anmelden' })
     );
+    this.loginForm.appendChild(this.emailInput);
+    this.loginForm.appendChild(this.passwordInput);
+    this.loginForm.appendChild(this.loginButton);
+    this.props.parent.appendChild(this.loginForm);
     this.props.parent.appendChild(this.demoButton);
     this.props.parent.appendChild(this.errorMessage);
   }
