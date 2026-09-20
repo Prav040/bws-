@@ -284,3 +284,19 @@
 - Verifiziert: kompletter Klick-Durchlauf mit echten Maus-Events + simulierte
   Safari-`focusout`-Sequenz — Panel bleibt offen (1→2→3 Muskelgruppen
   wählbar), Klick außerhalb schließt, „Alle Muskelgruppen“ setzt zurück.
+
+### Nachbesserung (3. Iteration)
+- **Bug:** Auf Touch-Geräten sprang die Auswahl nach jedem Tap sofort auf
+  „Alle Muskelgruppen“ zurück; Statistiken blieben unverändert. Ursache:
+  Doppel-Tap/Ghost-Click — der zweite Klick (~300 ms nach dem ersten, gleiche
+  Koordinate) trifft die neu gerenderte Option und toggelt die Auswahl wieder
+  aus. Im Touch-Test reproduziert: Tap 1 wählt an, Tap 2 wählt ab → Default.
+- **Fix:** (1) `isDoubleTap()`-Guard — zweiter Klick auf dasselbe Element
+  innerhalb von 400 ms wird ignoriert (Optionen UND Trigger); (2)
+  `touch-action: manipulation` global (`style.css`) + `user-scalable=no`
+  (`index.html`) gegen Doppeltipp-Zoom/Ghost-Clicks.
+- Verifiziert (Doppel-Klick-Sequenz, wirkt auf click-Ebene identisch wie
+  Touch-Ghost-Click): Panel bleibt offen, Auswahl bleibt an („Brust“);
+  schnelle Mehrfachauswahl auf verschiedene Gruppen möglich („2
+  Muskelgruppen“); bewusstes Abwählen nach >400 ms funktioniert; Klick auf
+  Zeitraum-Filter schließt das Panel weiterhin.

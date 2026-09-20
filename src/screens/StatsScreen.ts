@@ -61,6 +61,7 @@ export class StatsScreen {
   private muscleFilters = new Set<MuscleGroup>();
   private filterOpen = false;
   private docCloseHandler: ((e: MouseEvent) => void) | null = null;
+  private lastFilterTap: { target: string; at: number } | null = null;
   private chartBucket: 'week' | 'month' | 'year' = 'month';
 
   constructor(
@@ -471,6 +472,19 @@ export class StatsScreen {
       : `${e.topReps} Wdh`;
   }
 
+  /**
+   * Unterdrückt Doppel-Taps/Ghost-Clicks: Ein zweiter Klick auf dasselbe
+   * Element innerhalb von 400 ms wird ignoriert. Auf Touch-Geräten feuern
+   * Browser bei einem Tap teils einen zweiten Klick (~300 ms später) — ohne
+   * Guard würde die Auswahl sofort wieder zurückgetoggelt („springt auf default“).
+   */
+  private isDoubleTap(target: string): boolean {
+    const now = Date.now();
+    const double = this.lastFilterTap?.target === target && now - this.lastFilterTap.at < 400;
+    this.lastFilterTap = { target, at: now };
+    return double;
+  }
+
   /** Öffnet/schließt das Filter-Panel inkl. ARIA-Zustand und Außenklick-Listener. */
   private setFilterOpen(open: boolean): void {
     this.filterOpen = open;
@@ -520,6 +534,7 @@ export class StatsScreen {
     this.container.querySelectorAll('[data-muscle]').forEach((btn) => {
       btn.addEventListener('click', () => {
         const v = btn.getAttribute('data-muscle')!;
+        if (this.isDoubleTap(`muscle:${v}`)) return;
         if (v === 'all') {
           this.muscleFilters.clear();
           this.filterOpen = false;
@@ -540,6 +555,7 @@ export class StatsScreen {
     const trigger = this.container.querySelector<HTMLElement>('.filter-trigger');
 
     trigger?.addEventListener('click', () => {
+      if (this.isDoubleTap('trigger')) return;
       this.setFilterOpen(!this.filterOpen);
       if (this.filterOpen) trigger.focus();
     });
