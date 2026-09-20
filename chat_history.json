@@ -1,14 +1,6 @@
 [
   {
     "role": "user",
-    "content": "Doch du kannst ihn pingen @Performapp_dev_bot"
-  },
-  {
-    "role": "assistant",
-    "content": "Ich habe die Nachricht an den Developer gepingt und ein neues Issue (#4) erstellt, um ihn zu benachrichtigen. Hier ist der Link zum Issue: [Benachrichtigung an Developer](https://github.com/Prav040/bws-/issues/4).\n\nJetzt sollte der Developer informiert sein und die Möglichkeit haben, zu antworten, sobald er mit der Implementierung fertig ist. Wenn du weitere Unterstützung benötigst, lass es mich wissen!"
-  },
-  {
-    "role": "user",
     "content": "@Performapp_Lead_Bot bitte sag den Dev, er soll issue #1 direkt im code unsetzen und pushen"
   },
   {
@@ -54,5 +46,13 @@
   {
     "role": "assistant",
     "content": "Hier sind die Demo-Login-Daten, die ich gefunden habe:\n\n- **E-Mail:** demo@example.com\n- **Passwort:** Demo1234\n\nDu kannst diese Daten für den Zugang zur Demo-Anwendung verwenden. Wenn du weitere Fragen hast oder zusätzliche Unterstützung benötigst, lass es mich wissen!"
+  },
+  {
+    "role": "user",
+    "content": "@Performapp_Lead_Bot bitte sag dem Dev er soll in src/app.tsx das login formular komplett entfernen, damit nur noch das dashboard sichtbar ist. Das soll bitte auch alles in git auf einer entsprechenden branch"
+  },
+  {
+    "role": "assistant",
+    "content": "Die Aufgabe wurde erfolgreich an den Developer übergeben, der das Login-Formular in `src/app.tsx` entfernen und sicherstellen wird, dass nur das Dashboard sichtbar bleibt. Die Änderungen werden auf einer separaten Branch erstellt und anschließend zu Git gepusht.\n\nWenn du weitere Fragen oder Anliegen hast, lass es mich wissen!"
   }
 ]
