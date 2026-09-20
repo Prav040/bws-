@@ -59,6 +59,8 @@ export class StatsScreen {
   private customFrom: string;
   private customTo: string;
   private muscleFilters = new Set<MuscleGroup>();
+  private filterOpen = false;
+  private docCloseHandler: ((e: MouseEvent) => void) | null = null;
   private chartBucket: 'week' | 'month' | 'year' = 'month';
 
   constructor(
@@ -127,6 +129,14 @@ export class StatsScreen {
       return `${formatDateInputValue(this.customFrom)} – ${formatDateInputValue(this.customTo)}`;
     }
     return PERIOD_LABELS[this.periodDays === null ? 'all' : String(this.periodDays)];
+  }
+
+  /** Beschriftung des Filter-Dropdowns (gekürzte Zusammenfassung der Auswahl). */
+  private muscleFilterLabel(): string {
+    const n = this.muscleFilters.size;
+    if (n === 0) return 'Alle Muskelgruppen';
+    if (n === 1) return muscleGroupLabel([...this.muscleFilters][0]);
+    return `${n} Muskelgruppen`;
   }
 
   /* ------------------------------------------------------------------
@@ -286,14 +296,25 @@ export class StatsScreen {
             : ''
         }
 
-        <!-- Muskelgruppen-Mehrfachauswahl -->
-        <div class="flex flex-wrap gap-1.5 mt-3">
-          <button data-muscle="all" class="chip ${this.muscleFilters.size === 0 ? 'chip-accent' : ''}">Alle</button>
-          ${MUSCLE_GROUP_OPTIONS.map(
-            (g) => `
-              <button data-muscle="${g.value}" class="chip ${this.muscleFilters.has(g.value) ? 'chip-accent' : ''}"
-                aria-pressed="${this.muscleFilters.has(g.value)}">${g.label}</button>`,
-          ).join('')}
+        <!-- Muskelgruppen-Filter (Dropdown-Mehrfachauswahl) -->
+        <div class="filter-dropdown" id="muscle-filter">
+          <button type="button" class="filter-trigger" aria-haspopup="menu" aria-expanded="${this.filterOpen}">
+            <span class="filter-trigger-label">${escapeHtml(this.muscleFilterLabel())}</span>
+            <span class="filter-caret" aria-hidden="true">▾</span>
+          </button>
+          <div class="filter-panel${this.filterOpen ? ' open' : ''}" role="menu">
+            <button type="button" class="filter-option${this.muscleFilters.size === 0 ? ' active' : ''}"
+              data-muscle="all" role="menuitemcheckbox" aria-checked="${this.muscleFilters.size === 0}">
+              <span>Alle Muskelgruppen</span><span class="filter-check" aria-hidden="true">✓</span>
+            </button>
+            ${MUSCLE_GROUP_OPTIONS.map(
+              (g) => `
+                <button type="button" class="filter-option${this.muscleFilters.has(g.value) ? ' active' : ''}"
+                  data-muscle="${g.value}" role="menuitemcheckbox" aria-checked="${this.muscleFilters.has(g.value)}">
+                  <span>${g.label}</span><span class="filter-check" aria-hidden="true">✓</span>
+                </button>`,
+            ).join('')}
+          </div>
         </div>
 
         <!-- Gesamtvolumen-Karte -->
@@ -450,6 +471,37 @@ export class StatsScreen {
       : `${e.topReps} Wdh`;
   }
 
+  /** Öffnet/schließt das Filter-Panel inkl. ARIA-Zustand und Außenklick-Listener. */
+  private setFilterOpen(open: boolean): void {
+    this.filterOpen = open;
+    this.container.querySelector('.filter-trigger')?.setAttribute('aria-expanded', String(open));
+    this.container.querySelector('.filter-panel')?.classList.toggle('open', open);
+    if (open) this.bindDocumentClose();
+    else this.unbindDocumentClose();
+  }
+
+  /** Schließt das offene Panel bei Klick außerhalb (solange es offen ist). */
+  private bindDocumentClose(): void {
+    this.unbindDocumentClose();
+    if (!this.filterOpen) return;
+    const handler = (e: MouseEvent) => {
+      const target = e.target as Element | null;
+      // Elemente, die durch ein re-render() ersetzt wurden, ignorieren.
+      if (!target || !target.isConnected) return;
+      const dropdown = this.container.querySelector('.filter-dropdown');
+      if (dropdown && !dropdown.contains(target)) this.setFilterOpen(false);
+    };
+    this.docCloseHandler = handler;
+    document.addEventListener('click', handler);
+  }
+
+  private unbindDocumentClose(): void {
+    if (this.docCloseHandler) {
+      document.removeEventListener('click', this.docCloseHandler);
+      this.docCloseHandler = null;
+    }
+  }
+
   private bind(): void {
     this.container.querySelectorAll('[data-period]').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -469,14 +521,42 @@ export class StatsScreen {
         const v = btn.getAttribute('data-muscle')!;
         if (v === 'all') {
           this.muscleFilters.clear();
+          this.filterOpen = false;
         } else {
           const group = v as MuscleGroup;
           if (this.muscleFilters.has(group)) this.muscleFilters.delete(group);
           else this.muscleFilters.add(group);
+          // Panel offen lassen, damit mehrere Gruppen in einem Zug wählbar sind.
+          this.filterOpen = true;
         }
         this.render();
       });
     });
+
+    // Dropdown öffnen/schließen über den Trigger; Schließen bei Klick außerhalb,
+    // Fokusverlust oder Escape.
+    const dropdown = this.container.querySelector<HTMLElement>('.filter-dropdown');
+    const trigger = this.container.querySelector<HTMLElement>('.filter-trigger');
+
+    trigger?.addEventListener('click', () => {
+      this.setFilterOpen(!this.filterOpen);
+      if (this.filterOpen) trigger.focus();
+    });
+
+    dropdown?.addEventListener('focusout', (e: FocusEvent) => {
+      if (dropdown.contains(e.relatedTarget as Node)) return;
+      this.setFilterOpen(false);
+    });
+
+    dropdown?.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        this.setFilterOpen(false);
+        trigger?.focus();
+      }
+    });
+
+    // Klick außerhalb schließt (Listener nur aktiv, solange das Panel offen ist).
+    this.bindDocumentClose();
 
     this.container.querySelector('#date-from')?.addEventListener('change', (e) => {
       this.customFrom = (e.target as HTMLInputElement).value;

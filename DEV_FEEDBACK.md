@@ -237,3 +237,36 @@
 - „Sprache/Einheiten/Gerätesynchronisation“ sind Platzhalter mit „Demnächst“.
 - Das Profil im Real-Modus braucht die profiles-Tabelle (SQL-Block beim Lead);
   bis dahin erscheint der bestehende Hinweis „Profil konnte nicht geladen werden.“.
+
+---
+
+## Aufgabe: Statistik — Muskelgruppen-Filter als Dropdown statt Chip-Reihe
+
+**Status: Erfolg**
+
+### Umgesetzt
+- Die 10 Muskelgruppen-Chips + „Alle“-Chip in der Statistik sind durch ein
+  kompaktes Dropdown mit Mehrfachauswahl ersetzt (`src/screens/StatsScreen.ts`).
+- Trigger zeigt die aktuelle Auswahl gekürzt: „Alle Muskelgruppen“, bei genau
+  einer Gruppe deren Name, sonst „N Muskelgruppen“. Optionen mit ✓-Häkchen bei
+  aktiven Gruppen; „Alle Muskelgruppen“ setzt den Filter zurück.
+- Panel bleibt bei Gruppen-Auswahl offen (mehrere Gruppen in einem Zug wählbar),
+  schließt bei „Alle“, Klick außerhalb, Fokusverlust oder Escape.
+  Touch-Targets ≥ 44px, Fokus-Ring, `aria-expanded`/`role="menuitemcheckbox"`.
+- CSS zentral in `style.css` (Design-Token-Farben, keine Inline-Hex-Werte),
+  Klassen `.filter-trigger`/`.filter-panel`/`.filter-option`/`.filter-check`.
+- Filterlogik unverändert: Dropdown speist weiterhin dieselbe Pipeline
+  (`filteredEntries()`/`muscleStats()`), keine zweite Datenquelle.
+
+### Verifikation
+- `npm run typecheck` → OK (Exit 0)
+- `vite build` → OK (71 Module, dist erzeugt)
+- Browser (Mock-Modus, Demo-Account mit Seed-Daten): Dropdown öffnet/schließt
+  korrekt; „Brust“ → Trigger „Brust“, Donut-Legende schrumpft von 11 auf 2
+  Einträge; „Rücken“ zusätzlich → „2 Muskelgruppen“, beide aktiv; Klick
+  außerhalb schließt das Panel; „Alle Muskelgruppen“ → Trigger/Legende zurück
+  auf Ausgangszustand.
+
+### Hinweise
+- Der Dokument-Klick-Listener wird nur bei offenem Panel registriert und beim
+  Schließen entfernt (kein kumulatives Leak über re-renders).
