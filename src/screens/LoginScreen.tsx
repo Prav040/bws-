@@ -6,7 +6,6 @@ interface LoginProps {
   parent: HTMLElement;
   authService: IAuthService;
   onSuccess: () => void;
-  onRegister: () => void;
 }
 
 export class LoginScreen extends Component<LoginProps> {
