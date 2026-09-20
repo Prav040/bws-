@@ -10,74 +10,26 @@ interface LoginProps {
 }
 
 export class LoginScreen extends Component<LoginProps> {
-  private form: HTMLFormElement;
+  private demoButton: HTMLButtonElement;
   private errorMessage: HTMLElement;
 
   constructor(props: LoginProps) {
     super(props);
     this.errorMessage = this.createElement('div', { class: 'text-red-500' });
-    this.form = this.createLoginForm();
+    this.demoButton = this.createDemoButton();
   }
 
-  private createLoginForm(): HTMLFormElement {
-    const form = this.createElement('form', {
-      class: 'flex flex-col gap-4',
-    });
-
-    const emailInput = this.createElement('input', {
-      type: 'email',
-      placeholder: 'E-Mail',
-      class: 'p-2 border rounded',
-      value: 'demo@example.com', // Demo-Login-Daten voreingestellt
-    });
-
-    const passwordInput = this.createElement('input', {
-      type: 'password',
-      placeholder: 'Passwort',
-      class: 'p-2 border rounded',
-      value: 'Demo1234', // Demo-Login-Daten voreingestellt
-    });
-
-    const submitButton = this.createElement('button', {
-      type: 'submit',
-      class: 'bg-blue-500 text-white p-2 rounded',
-      textContent: 'Anmelden',
-    });
-
+  private createDemoButton(): HTMLButtonElement {
     const demoButton = this.createElement('button', {
       type: 'button',
-      class: 'bg-gray-500 text-white p-2 rounded mt-4',
+      class: 'bg-blue-500 text-white p-2 rounded',
       textContent: 'Als Demo-User anmelden',
       onclick: () => {
         this.handleSubmit('demo@example.com', 'Demo1234');
       },
     });
 
-    const registerLink = this.createElement('button', {
-      type: 'button',
-      class: 'text-blue-500 underline mt-2',
-      textContent: 'Noch kein Account? Registrieren',
-      onclick: () => this.props.onRegister(),
-    });
-
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = emailInput.value;
-      const password = passwordInput.value;
-      this.handleSubmit(email, password);
-    });
-
-    form.append(
-      this.createElement('h2', { class: 'text-2xl font-bold', textContent: 'Anmelden' }),
-      emailInput,
-      passwordInput,
-      submitButton,
-      demoButton,
-      registerLink,
-      this.errorMessage
-    );
-
-    return form;
+    return demoButton;
   }
 
   private async handleSubmit(email: string, password: string): Promise<void> {
@@ -95,6 +47,10 @@ export class LoginScreen extends Component<LoginProps> {
 
   mount(): void {
     this.props.parent.innerHTML = '';
-    this.props.parent.appendChild(this.form);
+    this.props.parent.appendChild(
+      this.createElement('h2', { class: 'text-2xl font-bold', textContent: 'Anmelden' })
+    );
+    this.props.parent.appendChild(this.demoButton);
+    this.props.parent.appendChild(this.errorMessage);
   }
 }

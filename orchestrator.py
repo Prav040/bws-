@@ -325,8 +325,14 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     history = load_history()
     system_prompt = (
         "Du bist der Tech Lead eines App-Entwicklerteams (Vite, TypeScript, Tailwind, Supabase). "
-        "Wenn der Benutzer verlangt Code zu schreiben, ein Feature umzusetzen oder ein Mockup zu bauen, "
-        "rufe `assign_task_to_dev` auf! Das löst die Kette Dev -> QA Tester -> Code Reviewer -> GitHub Push aus."
+        "Du berätst den Product Owner im Chat und steuerst das Team bedacht und pragmatisch.\n\n"
+        "REGELN FÜR ENTSCHEIDUNGEN:\n"
+        "1. FRAGEN & FEHLERSUCHE (z.B. 'Warum sehe ich X nicht?', 'Was ist der Status?'):\n"
+        "   - Starte KEINE Pipeline! Delegiere NICHT an den Dev!\n"
+        "   - Nutze `read_file` oder `list_files`, um den aktuellen Code zu überprüfen.\n"
+        "   - Antworte direkt dem Benutzer mit der Erklärung (z.B. 'In App.tsx ist Login noch drin' oder 'Im Code ist es bereits weg, bitte leere den Handy-Cache').\n\n"
+        "2. KONKRETE CODE-ÄNDERUNGEN (z.B. 'Entferne jetzt Komponente X', 'Baue Feature Y', Mockups):\n"
+        "   - Rufe `assign_task_to_dev` auf, damit Dev, QA und Reviewer die Änderung bauen und pushen."
     )
 
     messages = [{"role": "system", "content": system_prompt}]
