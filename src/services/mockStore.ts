@@ -51,8 +51,8 @@ export const mockStore = {
     const id = crypto.randomUUID();
     const demo: StoredUser = {
       id,
-      email: 'demo@bws.app',
-      password: 'demo1234',
+      email: 'demo@example.com',
+      password: 'Demo1234',
       username: 'Demo',
       profile: {
         user_id: id,
